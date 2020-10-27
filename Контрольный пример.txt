@@ -1,0 +1,40 @@
+#require 'standart.txt';
+
+func short userFunc(short a, short b)
+{
+	var short c;
+	c = c + a*b;
+	ret c;
+}
+
+proc userProc(string str)
+{
+	write $strlen(str);
+}
+
+main
+{
+	var string s1 = 'Привет, Мир!!!!';
+	var string s2 = 'Hello, World!!!';
+	var short v1 = 1100;
+	var short v2 = 100;
+	var bool b1 = false;
+	var bool b2 = v1;
+	var string buf = (short)v1;
+	var short TCHAR = 11;
+
+	var short v3;
+
+	v3 = (v1 + b1)*v1/v2;
+	var short i = 0;
+	while(i < v3)
+	{
+		write i;
+		i = i + 1;	
+	}
+	
+	write &random(1,101);
+	write &userFunc(11, 101);
+
+	$userProc(s2);
+}
