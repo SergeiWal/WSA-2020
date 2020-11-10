@@ -1,14 +1,19 @@
-﻿Сборка начата 06.11.2020 18:19:08.
+﻿Сборка начата 10.11.2020 16:49:32.
 Уровень детализации журнала: Normal.     1>Проект "D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\WSA2020.vcxproj" в узле 2 (целевые объекты Build).
      1>InitializeBuildStatus:
          Создание "Debug\WSA2020.tlog\unsuccessfulbuild", так как было задано "AlwaysCreate".
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.27.29110\bin\HostX86\x86\CL.exe /c /ZI /JMC /nologo /W3 /WX- /diagnostics:column /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /permissive- /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc142.pdb" /Gd /TP /analyze- /FC /errorReport:prompt In.cpp
-         In.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.27.29110\bin\HostX86\x86\CL.exe /c /ZI /JMC /nologo /W3 /WX- /diagnostics:column /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /permissive- /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc142.pdb" /Gd /TP /analyze- /FC /errorReport:prompt Lex.cpp
+         Lex.cpp
+     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(15,21): warning C4018: <: несоответствие типов со знаком и без знака
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.27.29110\bin\HostX86\x86\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GIT\WSA-2020_course_project\WSA2020\Debug\WSA2020.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG:FASTLINK /PDB:"D:\GIT\WSA-2020_course_project\WSA2020\Debug\WSA2020.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GIT\WSA-2020_course_project\WSA2020\Debug\WSA2020.lib" /MACHINE:X86 Debug\Error.obj
+         Debug\FST.obj
          Debug\In.obj
+         Debug\IT.obj
+         Debug\Lex.obj
          Debug\Log.obj
+         Debug\LT.obj
          Debug\Parm.obj
          Debug\WSA2020.obj
          WSA2020.vcxproj -> D:\GIT\WSA-2020_course_project\WSA2020\Debug\WSA2020.exe
@@ -18,7 +23,12 @@
      1>Сборка проекта "D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\WSA2020.vcxproj" завершена (целевые объекты Build).
 
 Сборка успешно завершена.
-    Предупреждений: 0
+
+       "D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\WSA2020.vcxproj" (целевой объект Build ) (1) ->
+       (Целевой объект ClCompile) -> 
+         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(15,21): warning C4018: <: несоответствие типов со знаком и без знака
+
+    Предупреждений: 1
     Ошибок: 0
 
-Прошло времени 00:00:01.99
+Прошло времени 00:00:01.25

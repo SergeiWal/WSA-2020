@@ -101,6 +101,7 @@ namespace In {
 			for (auto c : i.value)std::cout << c;
 			std::cout << LEXEMA_DELEMITOR;
 		}
+		std::cout << std::endl;
 	}
 
 	void AddWord(IN& in, word& wd, int pos, bool isOper)

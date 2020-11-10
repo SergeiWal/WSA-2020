@@ -1,4 +1,4 @@
-func short userFunc(short a, short b)
++ func short userFunc(short a, short b)
 {
 	var short c;
 	c = c + a*b;
