@@ -1,4 +1,4 @@
-+ func short userFunc(short a, short b)
+func short userFunc(short a, short b)
 {
 	var short c;
 	c = c + a*b;
@@ -14,25 +14,25 @@ main
 {
 	var string s1 = 'Привет, Мир!!!!';
 	var string s2 = 'Hello, World!!!';
-	var short v1 = 1100;
-	var short v2 = 100;
+	var short v1 = 0b1100;
+	var short v2 = 0b100;
 	var bool b1 = false;
 	var bool b2 = v1;
 	var string buf = (short)v1;
-	var short TCHAR = 11;
+	var short TCHAR = 1b11;
 
 	var short v3;
 
 	v3 = (v1 + b1)*v1/v2;
-	var short i = 0;
-	while(i < v3)
+	var short i = 0b0;
+	while(i != v3)
 	{
 		write i;
-		i = i + 1;	
+		i = i + 0b1;	
 	}
 	
-	write $random(1,101);
-	write $userFunc(11, 101);
+	write $random(0b1,0b101);
+	write $userFunc(0b11, 0b101);
 
 	$userProc(s2);
 }

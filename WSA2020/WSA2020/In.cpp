@@ -69,7 +69,13 @@ namespace In {
 					in.size++;
 				break;
 			case IN::S:
-					if (!isString)
+					if (!isString && symbol == '=' && (in.text[in.text.size() - 1].value[0] == '=' ||
+						in.text[in.text.size() - 1].value[0] == '!'))
+					{
+						in.text[in.text.size() - 1].value.push_back(symbol);
+						in.text[in.text.size() - 1].end++;
+					}
+					else if (!isString)
 					{
 						AddWord(in, newWord, position, true);
 						in.size++;

@@ -17,12 +17,10 @@ int _tmain(int argc, _TCHAR* argv[])
 		In::IN in = In::getin(parm.in);
 		In::WriteInputTextInConsole(in);
 		LEX::LEX lex;
-		LEX::LexType lextype ;
-		for (int i = 0; i < in.text.size(); ++i)
-		{
-			lextype = LEX::LAnaliz(in.text[i]);
-		}
-		
+		lex.lextable = LT::Create(in.text.size());
+		lex.idtable = IT::Create(in.text.size());
+		LEX::TableFilling(in, lex);
+		LEX::LexTableOut(lex.lextable);
 		Log::WriteIn(log, in);
 		std::cout << std::endl;
 	}

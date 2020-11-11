@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stack>
-
+#include <set>
 
 #include "includelib.h"
 #include "Error.h"
@@ -160,12 +160,12 @@
 					  LexExample('t',FST::FST(BOOL_LITERAL),LexType::L), LexExample('f',FST::FST(BOOL_LITERAL),LexType::L),\
 					  LexExample('v',FST::FST(VAR),LexType::V), LexExample('m',FST::FST(MAIN),LexType::M),\
 					  LexExample('f',FST::FST(FUNC),LexType::F), LexExample('p',FST::FST(PROC),LexType::P),\
-					  LexExample('r',FST::FST(RET),LexType::R), LexExample('w',FST::FST(CYCLE),LexType::W), \
-					  LexExample('w',FST::FST(WRITE),LexType::WR)} 
+					  LexExample('r',FST::FST(RET),LexType::R), LexExample('w',FST::FST(CYCLE),LexType::C), \
+					  LexExample('w',FST::FST(WRITE),LexType::W)} 
 				
 namespace LEX
 {
-	enum class LexType { T = 1, L = 2, V = 3, M = 4, F = 5, P = 6, R = 7, W = 8, WR = 9, O = 10, I = 11 };
+	enum class LexType { T = 1, L = 2, V = 3, M = 4, F = 5, P = 6, R = 7, C = 8, W = 9, O = 10, I = 11 };
 	
 	struct LexExample
 	{
@@ -185,10 +185,13 @@ namespace LEX
 	{
 		LT::LexTable lextable;
 		IT::IdTable  idtable;
-		
+		std::set<char> one_symbol_lexems = { LEX_SEMICOLON,LEX_COMA,LEX_LEFTBRACE,LEX_BRACELET,LEX_LEFTHESIS,
+												LEX_RIGHTHESIS,LEX_EQUALL, LEX_LESS,LEX_MORE, LEX_CALL };
 	};
 
 	LexType LAnaliz( In::word word);
 	unsigned char* UchVectorToString(std::vector<unsigned char> word);
-	//void TableFilling(In::IN in, LEX lex);
+	void SetNewLtNodeValue(LT::Entry& entry, char value);
+	void TableFilling(In::IN in, LEX& lex);
+	void LexTableOut(LT::LexTable lt);
 }
