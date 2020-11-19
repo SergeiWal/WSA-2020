@@ -2,6 +2,20 @@
 
 namespace IT
 {
+	Entry::Entry(IDTYPE nidtype, IDDATATYPE niddatatype, std::string vReg, std::vector<unsigned char> nid)
+	{
+		
+		idtype = nidtype;
+		iddatatype = niddatatype;
+		visibilityRegion = vReg;
+		for (int j = 0; j < nid.size() && j < ID_MAXSIZE; ++j)
+		{
+			id[j] = nid[j];  
+			if ((j + 1) == nid.size() || (j + 1) == ID_MAXSIZE)id[j + 1] = STR_END;
+		}
+		
+	}
+
 	IdTable Create(int size)
 	{
 		IdTable* it = new IdTable;
@@ -27,42 +41,41 @@ namespace IT
 
 	int IsId(IdTable& idtable, Entry ent)
 	{
-		if (ent.idtype != IT::L)
-		{
-			for (int i = 0; i < idtable.size; ++i)
-			{
-				//
-				if (strcmp(idtable.table[i].id, ent.id) == 0 && strcmp(idtable.table[i].visibilityRegion, ent.visibilityRegion) == 0)return i;
-			}
+		std::string visibleForCheck;
+		if (ent.idtype == IT::IDTYPE::C)visibleForCheck = GLOBAL_VISIBLE;
+		else visibleForCheck = ent.visibilityRegion;
 
-			if (ent.idtype == IT::N)
+		if (ent.idtype == IT::IDTYPE::L)
+		{
+			switch (ent.iddatatype)
 			{
-				for (int i = 0; i < idtable.size; i++)
-				{
-					if (strcmp(idtable.table[i].id, ent.id) == 0 && idtable.table[i].visibilityRegion[0] == '$' &&
-						idtable.table[i].idtype == IT::F)return i;
-				}
+			case IT::IDDATATYPE::BL:
+				for (int i = 0; i < idtable.size; ++i)
+					if (ent.idtype == IT::IDTYPE::L && idtable.table[i].value.vbool == ent.value.vbool)
+						return i;
+				break;
+			case IT::IDDATATYPE::INT:
+				for (int i = 0; i < idtable.size; ++i)
+					if (ent.idtype == IT::IDTYPE::L && idtable.table[i].value.vint == ent.value.vint)
+						return i;
+				break;
+			case IT::IDDATATYPE::STR:
+				for (int i = 0; i < idtable.size; ++i)
+					if (ent.idtype == IT::IDTYPE::L &&
+						strcmp((char*)idtable.table[i].value.vstr.str, (char*)ent.value.vstr.str) == 0)
+						return i;
+				break;
+			default:
+				break;
 			}
 		}
 		else
 		{
 			for (int i = 0; i < idtable.size; ++i)
-			{
-				switch (ent.iddatatype)
-				{
-				case IT::INT:
-					if (ent.idtype == idtable.table[i].idtype && ent.value.vint == idtable.table[i].value.vint)return i;
-					break;
-				case IT::STR:
-					if (ent.idtype == idtable.table[i].idtype && strcmp((char*)idtable.table[i].value.vstr.str, (char*)ent.value.vstr.str) == 0)
-						return i;
-					break;
-				default:
-					break;
-				}
-			}
+				if (strcmp(idtable.table[i].id, ent.id) == 0 && idtable.table[i].visibilityRegion == visibleForCheck)
+					return i;
 		}
-
+				
 		return TI_NULLIDX;
 	}
 

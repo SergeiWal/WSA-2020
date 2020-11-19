@@ -2,37 +2,49 @@
 
 #include "includelib.h"
 #include "Error.h"
+#include <string>
+#include <vector>
 
-#define ID_MAXSIZE 5
+#define ID_MAXSIZE 8
 #define TI_MAXSIZE 4096
 #define TI_INT_DEFAULT 0x00000000
 #define TI_STR_DEFAULT 0x00
 #define TI_NULLIDX 0xffffffff
 #define TI_STR_MAXSIZE 255
+#define GLOBAL_VISIBLE "global"
+#define MAIN_VISIBLE "main"
+#define CYCLE_VISIBLE(i) "while" + std::to_string(i)
+#define SIGN_OCT_NUMBER 'o'
+#define SIGN_BIN_NUMBER 'b'
+#define LITERAL_NAME "Ltr__"
 
 namespace IT
 {
-	enum IDDATATYPE { INT = 1, STR = 2 , NLL = 3};
-	enum IDTYPE { V = 1, F = 2, P = 3, L = 5 , N = 4};
-
+	enum class IDDATATYPE { INT = 1, STR = 2, BL = 3, NONE = 4 };
+	enum class IDTYPE { V = 1, F = 2, P = 3, A = 4, L = 5, C = 6, NONE = 7 };
+	//v- переменная;f-функция;p-процедура;a-параметр функции\процедуры;
+	//l- литерал;c - вызов функции\процедуры;none-неопределённое значение;
 
 	struct Entry
 	{
 		int idxfirstLE;
-		char id[ID_MAXSIZE];
+		char id[ID_MAXSIZE + 1];
 		IDDATATYPE iddatatype;
 		IDTYPE idtype;
-		char visibilityRegion[ID_MAXSIZE];
+		std::string visibilityRegion;
 		union 
 		{
 			int vint;
 			struct
 			{
-				char len;
+				int len;
 				unsigned char str[TI_STR_MAXSIZE - 1];
 
 			} vstr;
+			bool vbool;
 		}value;
+		Entry() {};
+		Entry(IDTYPE nidtype, IDDATATYPE niddatatype, std::string vReg, std::vector<unsigned char> nid);
 	};
 
 	struct IdTable

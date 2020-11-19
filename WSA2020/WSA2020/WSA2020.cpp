@@ -19,8 +19,9 @@ int _tmain(int argc, _TCHAR* argv[])
 		LEX::LEX lex;
 		lex.lextable = LT::Create(in.text.size());
 		lex.idtable = IT::Create(in.text.size());
-		LEX::TableFilling(in, lex);
+		LEX::TableFill(in, lex);
 		LEX::LexTableOut(lex.lextable);
+		LEX::IdTableOut(lex.idtable);
 		Log::WriteIn(log, in);
 		std::cout << std::endl;
 	}

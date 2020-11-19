@@ -190,8 +190,20 @@ namespace LEX
 	};
 
 	LexType LAnaliz( In::word word);
-	unsigned char* UchVectorToString(std::vector<unsigned char> word);
+	unsigned char* UchVectorToString(const std::vector<unsigned char>& word);
+
 	void SetNewLtNodeValue(LT::Entry& entry, char value);
-	void TableFilling(In::IN in, LEX& lex);
+	IT::IDDATATYPE GetDataType(std::vector<unsigned char> word);
+	void IsParametrSet(IT::Entry& ent, char nextCh);
+	void ExitFromVisibleRegion(std::stack<std::string>& regions, char currentCh, bool isCycle);
+	void SetDefaultValue(IT::Entry& ent);
+	void SetLiteralValue(IT::Entry& ent, const std::vector<unsigned char>& word);
+	void SetLiteralName(IT::Entry& ent, int number);
+
+	int OctToInt(std::vector<unsigned char> word);
+	int BinToInt(std::vector<unsigned char> word);
+
+	void TableFill(In::IN in, LEX& lex);
 	void LexTableOut(LT::LexTable lt);
+	void IdTableOut(IT::IdTable it);
 }

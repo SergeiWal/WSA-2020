@@ -9,24 +9,12 @@ namespace LEX
 		type = tp;
 	}
 
-	unsigned char* UchVectorToString(std::vector<unsigned char> word)
-	{
-		unsigned char* str = new unsigned char[word.size()];
-		for (int i = 0; i < word.size(); ++i)str[i] = word[i];
-		return str;
-	}
-	void SetNewLtNodeValue(LT::Entry& entry, char value)
-	{
-		entry.lexema[0] = value;
-		entry.lexema[1] = STR_END;
-	}
-
 	LexType LAnaliz( In::word word)
 	{
 		LexExample tokensArray[TOKENS_ARRAY_SIZE] = TOKENS_ARRAY;
 
 		unsigned char* str = UchVectorToString(word.value);
-		str[word.value.size()] = STR_END;
+		
 
 		for (int i = 0; i < TOKENS_ARRAY_SIZE; ++i)
 		{
@@ -37,7 +25,6 @@ namespace LEX
 				{
 					return tokensArray[i].type;
 				}
-				
 			}
 		}
 
@@ -58,19 +45,37 @@ namespace LEX
 		throw ERROR_THROW_IN(123, word.line, word.begin);
 	}
 
-	void TableFilling(In::IN in, LEX& lex)
+	unsigned char* UchVectorToString(const std::vector<unsigned char>& word)
+	{
+		unsigned char* str = new unsigned char[word.size()];
+		for (int i = 0; i < word.size(); ++i)str[i] = word[i];
+		str[word.size()] = STR_END;
+		return str;
+	}
+
+	void TableFill(In::IN in, LEX& lex)
 	{
 		LexType lextype;
-		
+		std::stack<std::string> visibleRegions;
+		visibleRegions.push(GLOBAL_VISIBLE);
+
+		IT::Entry* itNewEntry;
+
+		IT::IDDATATYPE currentIdDataType = IT::IDDATATYPE::NONE;
+		IT::IDTYPE currentIdType = IT::IDTYPE::NONE;
+		bool isCycle = false;
+
 		for (int i = 0; i<in.text.size(); ++i)
 		{
-			LT::Entry* newEntry = new LT::Entry;
-			newEntry->sn = in.text[i].line;
-			newEntry->idxTI = LT_IT_NULLIDX;
+			LT::Entry* ltNewEntry = new LT::Entry;
+			ltNewEntry->sn = in.text[i].line;
+			ltNewEntry->idxTI = LT_IT_NULLIDX;
 
 			if (in.text[i].value.size() == 1 && lex.one_symbol_lexems.find(in.text[i].value[0]) != lex.one_symbol_lexems.end())
 			{
-				SetNewLtNodeValue(*newEntry, in.text[i].value[0]);
+				if (in.text[i].value[0] == LEX_CALL)currentIdType = IT::IDTYPE::C;
+				ExitFromVisibleRegion(visibleRegions, in.text[i].value[0],isCycle);
+				SetNewLtNodeValue(*ltNewEntry, in.text[i].value[0]);
 			}
 			else
 			{
@@ -78,45 +83,225 @@ namespace LEX
 				switch (lextype)
 				{
 				case LexType::F:
-					SetNewLtNodeValue(*newEntry, LEX_FUNCTION);
+					currentIdType = IT::IDTYPE::F;
+					SetNewLtNodeValue(*ltNewEntry, LEX_FUNCTION);
 					break;
 				case LexType::I:
-					SetNewLtNodeValue(*newEntry, LEX_ID);
+					SetNewLtNodeValue(*ltNewEntry, LEX_ID);
+
+					itNewEntry = new IT::Entry(currentIdType,currentIdDataType,visibleRegions.top(), in.text[i].value);
+					IsParametrSet(*itNewEntry, in.text[i + 1].value[0]);
+
+					ltNewEntry->idxTI = IT::IsId(lex.idtable, *itNewEntry);
+					if (itNewEntry->idtype == IT::IDTYPE::V && ltNewEntry->idxTI != TI_NULLIDX)
+						throw ERROR_THROW_IN(127, in.text[i].line, in.text[i].begin);
+
+					if (ltNewEntry->idxTI == TI_NULLIDX) 
+					{
+						if (itNewEntry->idtype == IT::IDTYPE::NONE)
+							throw ERROR_THROW_IN(125, in.text[i].line, in.text[i].begin);
+						if (itNewEntry->iddatatype == IT::IDDATATYPE::NONE && itNewEntry->idtype != IT::IDTYPE::P)
+							throw ERROR_THROW_IN(126, in.text[i].line, in.text[i].begin);
+
+						SetDefaultValue(*itNewEntry);
+						ltNewEntry->idxTI = lex.idtable.size;
+						itNewEntry->idxfirstLE = lex.lextable.size;
+						IT::Add(lex.idtable, *itNewEntry);
+					} 
+					
+					if (itNewEntry->idtype == IT::IDTYPE::F || itNewEntry->idtype == IT::IDTYPE::P)
+						visibleRegions.push(itNewEntry->id);
+
+					currentIdDataType = IT::IDDATATYPE::NONE;
+					currentIdType = IT::IDTYPE::NONE;
 					break;
 				case LexType::L:
-					SetNewLtNodeValue(*newEntry, LEX_LITERAL);
+					SetNewLtNodeValue(*ltNewEntry, LEX_LITERAL);
+					currentIdType = IT::IDTYPE::L;
+					itNewEntry = new IT::Entry;
+					SetLiteralValue(*itNewEntry, in.text[i].value);
+					ltNewEntry->idxTI = IT::IsId(lex.idtable, *itNewEntry);
+					if (ltNewEntry->idxTI == TI_NULLIDX)
+					{
+						SetLiteralName(*itNewEntry, i);
+						ltNewEntry->idxTI = lex.idtable.size;
+						itNewEntry->idxfirstLE = lex.lextable.size;
+						IT::Add(lex.idtable, *itNewEntry);
+					}
+					currentIdDataType = IT::IDDATATYPE::NONE;
+					currentIdType = IT::IDTYPE::NONE;
 					break;
 				case LexType::M:
-					SetNewLtNodeValue(*newEntry, LEX_MAIN);
+					visibleRegions.push(MAIN_VISIBLE);
+					SetNewLtNodeValue(*ltNewEntry, LEX_MAIN);
 					break;
 				case LexType::O:
-					SetNewLtNodeValue(*newEntry, LEX_OPERATION);
+					SetNewLtNodeValue(*ltNewEntry, LEX_OPERATION);
 					break;
 				case LexType::P:
-					SetNewLtNodeValue(*newEntry, LEX_PROC);
+					currentIdType = IT::IDTYPE::P;
+					SetNewLtNodeValue(*ltNewEntry, LEX_PROC);
 					break;
 				case LexType::R:
-					SetNewLtNodeValue(*newEntry, LEX_RETURN);
+					SetNewLtNodeValue(*ltNewEntry, LEX_RETURN);
 					break;
 				case LexType::T:
-					SetNewLtNodeValue(*newEntry, LEX_TYPE);
+					currentIdDataType = GetDataType(in.text[i].value);
+					SetNewLtNodeValue(*ltNewEntry, LEX_TYPE);
 					break;
 				case LexType::V:
-					SetNewLtNodeValue(*newEntry, LEX_VAR);
-					break;
+					currentIdType = IT::IDTYPE::V;
+					SetNewLtNodeValue(*ltNewEntry, LEX_VAR);
+					break; 
 				case LexType::C:
-					SetNewLtNodeValue(*newEntry, LEX_CYCLE);
+					isCycle = true;
+					SetNewLtNodeValue(*ltNewEntry, LEX_CYCLE);
 					break;
 				case LexType::W:
-					SetNewLtNodeValue(*newEntry, LEX_WRITE);
+					SetNewLtNodeValue(*ltNewEntry, LEX_WRITE);
 					break;
 				default:
 					break;
 				}
 
 			}
-			LT::Add(lex.lextable, *newEntry);
+			LT::Add(lex.lextable, *ltNewEntry);
 		}
+	}
+
+	void IsParametrSet(IT::Entry& ent, char nextCh)
+	{
+		if (ent.idtype == IT::IDTYPE::NONE && ent.iddatatype != IT::IDDATATYPE::NONE &&
+			(nextCh == LEX_COMA || nextCh == LEX_RIGHTHESIS))
+			ent.idtype = IT::IDTYPE::A;
+	}
+
+	void ExitFromVisibleRegion(std::stack<std::string>& regions, char currentCh, bool isCycle)
+	{
+		if (currentCh == LEX_BRACELET && !isCycle)regions.pop();
+		else if (currentCh == LEX_BRACELET && isCycle)isCycle = false;
+	}
+
+	void SetNewLtNodeValue(LT::Entry& entry, char value)
+	{
+		entry.lexema[0] = value;
+		entry.lexema[1] = STR_END;
+	}
+
+	IT::IDDATATYPE GetDataType(std::vector<unsigned char> word)
+	{
+		switch (word[0])
+		{
+		case 's':
+			if(word[1] == 't')return IT::IDDATATYPE::STR;
+			if (word[1] == 'h')return IT::IDDATATYPE::INT;
+			break;
+		case 'b':
+			return IT::IDDATATYPE::BL;
+			break;
+		default:
+			return IT::IDDATATYPE::NONE;
+			break;
+		}
+	}
+
+	void SetDefaultValue(IT::Entry& ent)
+	{
+		switch (ent.iddatatype)
+		{
+		case IT::IDDATATYPE::BL:
+			ent.value.vbool = false;
+			break;
+		case IT::IDDATATYPE::INT:
+			ent.value.vint = 0;
+			break;
+		case IT::IDDATATYPE::STR:
+			ent.value.vstr.len = 0;
+			ent.value.vstr.str[0] = STR_END;
+			break;
+		default:
+			break;
+		}
+	}
+
+	void SetLiteralValue(IT::Entry& ent, const std::vector<unsigned char>& word)
+	{
+		ent.idtype = IT::IDTYPE::L;
+		ent.visibilityRegion = "global";
+		if (word[0] == '\'')
+		{
+			int size = 0;
+			int i = 1;
+			while (word[i] != '\'')
+			{
+				ent.value.vstr.str[size] = word[i];
+				i++;
+				size++;
+			}
+			ent.value.vstr.len = size;
+			ent.value.vstr.str[size] = STR_END;
+			ent.iddatatype = IT::IDDATATYPE::STR;
+		}
+		else if (word[0] == 't')
+		{
+			ent.iddatatype = IT::IDDATATYPE::BL;
+			ent.value.vbool = true;
+		}
+		else if (word[0] == 'f')
+		{
+			ent.iddatatype = IT::IDDATATYPE::BL;
+			ent.value.vbool = false;
+		}
+		else if (word[1] == SIGN_BIN_NUMBER)
+		{
+			ent.iddatatype = IT::IDDATATYPE::INT;
+			ent.value.vint = BinToInt(word);
+		}
+		else if (word[1] == SIGN_OCT_NUMBER)
+		{
+			ent.iddatatype = IT::IDDATATYPE::INT;
+			ent.value.vint = OctToInt(word);
+		}
+		
+	}
+
+	void SetLiteralName(IT::Entry& ent, int number)
+	{
+		strcpy_s(ent.id, ID_MAXSIZE, LITERAL_NAME);
+		_itoa_s(number, ent.id + 4, ID_MAXSIZE, 10);
+	}
+
+
+	int OctToInt(std::vector<unsigned char> word)
+	{
+		int number = 0;
+		int power = 0;
+		int i = word.size() - 1;
+		while (word[i] != SIGN_OCT_NUMBER)
+		{
+			number += (word[i] - '0') * pow(8,power);
+			power++;
+			i--;
+		}
+		--i;
+		if (word[i] == '1')number = -number;
+		return number;
+	}
+
+	int BinToInt(std::vector<unsigned char> word)
+	{
+		int number = 0;
+		int power = 0;
+		int i = word.size() - 1;
+		while (word[i] != SIGN_BIN_NUMBER)
+		{
+			number += (word[i] - '0') * pow(2, power);
+			power++;
+			i--;
+		}
+		--i;
+		if (word[i] == '1')number = -number; 
+		return number;
 	}
 
 	void LexTableOut(LT::LexTable lt)
@@ -138,6 +323,69 @@ namespace LEX
 				out << line << " ";
 			}
 			out << lt.table[i].lexema;
+		}
+		out.close();
+	}
+
+	void IdTableOut(IT::IdTable it)
+	{
+		std::ofstream out;
+		out.open("IdTable.txt");
+		if (!out.is_open())throw ERROR_THROW(123);
+		out << "\t" << "NAME" << "\t" << "DATATYPE" << "\t" << "VALUE"  << "\t" << "TYPE" << "\t\t\t" << "REFERENCE" << "\t" << "VISIBILITY\n";
+		for (int i = 0; i < it.size; ++i)
+		{
+			
+				if (i < 10)out << "00";
+				if (i < 100 && i >= 10)out << "0";
+				out << i << "\t" << it.table[i].id << "\t";
+
+				switch (it.table[i].iddatatype)
+				{
+				case IT::IDDATATYPE::INT:
+					out << "short" << "\t";
+					out << it.table[i].value.vint << "\t";
+					break;
+				case IT::IDDATATYPE::STR:
+					out << "string" << "\t";
+					if (it.table[i].value.vstr.len == 0)out << "\'\'" << "\t";
+					else out << '\'' << it.table[i].value.vstr.str << "\'\t";
+					break;
+				case IT::IDDATATYPE::BL:
+					out << "bool" << "\t";
+					if (it.table[i].value.vbool)out << "true" << "\t";
+					else out << "false" << "\t";
+					break;
+				default:
+					out << "void" << "\t";
+					out << "none" << "\t";
+					break;
+				}
+
+				switch (it.table[i].idtype)
+				{
+				case IT::IDTYPE::F:
+					out << "function name" << "\t\t";
+					break;
+				case IT::IDTYPE::P:
+					out << "procedure name" << "\t\t";
+					break;
+				case IT::IDTYPE::V:
+					out << "variable name" << "\t\t";
+					break;
+				case IT::IDTYPE::L:
+					out << "literal" << "\t\t";
+					break;
+				case IT::IDTYPE::A:
+					out << "parameter" << "\t\t";
+					break;
+				default:
+					break;
+				}
+
+				out << it.table[i].idxfirstLE << "\t\t";
+
+				out << it.table[i].visibilityRegion << std::endl;
 		}
 		out.close();
 	}

@@ -1,0 +1,26 @@
+	NAME	DATATYPE	VALUE	TYPE			REFERENCE	VISIBILITY
+000	userFunc	short	0	function name		2		global
+001	a	short	0	parameter		5		userFunc
+002	b	short	0	parameter		8		userFunc
+003	c	short	0	variable name		13		userFunc
+004	userProc	void	none	procedure name		28		global
+005	str	string	''	parameter		31		userProc
+006	Ltr_35	short	668	literal		35		global
+007	s1	string	''	variable name		42		main
+008	Ltr_44	string	'Привет, Мир!!!!'	literal		44		global
+009	s2	string	''	variable name		48		main
+010	Ltr_50	string	'Hello, World!!!'	literal		50		global
+011	v1	short	0	variable name		54		main
+012	Ltr_56	short	12	literal		56		global
+013	v2	short	0	variable name		60		main
+014	Ltr_62	short	4	literal		62		global
+015	b1	bool	false	variable name		66		main
+016	b2	bool	false	variable name		72		main
+017	buf	string	''	variable name		78		main
+018	TCHAR	short	0	variable name		87		main
+019	Ltr_89	short	-3	literal		89		global
+020	v3	short	0	variable name		93		main
+021	i	short	0	variable name		109		main
+022	Ltr_127	short	1	literal		127		global
+023	Ltr_134	short	3	literal		134		global
+024	Ltr_136	short	5	literal		136		global

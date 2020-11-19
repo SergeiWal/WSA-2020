@@ -7,7 +7,7 @@ func short userFunc(short a, short b)
 
 proc userProc(string str)
 {
-	write $strlen(str);
+	write 0o1234;
 }
 
 main
@@ -31,7 +31,6 @@ main
 		i = i + 0b1;	
 	}
 	
-	write $random(0b1,0b101);
 	write $userFunc(0b11, 0b101);
 
 	$userProc(s2);
