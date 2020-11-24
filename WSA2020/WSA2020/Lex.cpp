@@ -136,6 +136,18 @@ namespace LEX
 					SetNewLtNodeValue(*ltNewEntry, LEX_MAIN);
 					break;
 				case LexType::O:
+					currentIdDataType = IT::IDDATATYPE::NONE;
+					currentIdType = IT::IDTYPE::NONE;
+					itNewEntry = new IT::Entry;
+					itNewEntry->idtype = IT::IDTYPE::O;
+					SetOperatorValue(*itNewEntry, in.text[i].value[0]);
+					ltNewEntry->idxTI = IT::IsId(lex.idtable, *itNewEntry);
+					if (ltNewEntry->idxTI == TI_NULLIDX)
+					{
+						ltNewEntry->idxTI = lex.idtable.size;
+						itNewEntry->idxfirstLE = lex.lextable.size;
+						IT::Add(lex.idtable, *itNewEntry);
+					}
 					SetNewLtNodeValue(*ltNewEntry, LEX_OPERATION);
 					break;
 				case LexType::P:
@@ -271,6 +283,48 @@ namespace LEX
 		_itoa_s(number, ent.id + 4, ID_MAXSIZE, 10);
 	}
 
+	void SetOperatorValue(IT::Entry& ent, char ch)
+	{
+		switch (ch)
+		{
+		case '+':
+			ent.id[0] = '+';
+			ent.id[1] = STR_END;
+			break;
+		case '-':
+			ent.id[0] = '-';
+			ent.id[1] = STR_END;
+			break;
+		case '*':
+			ent.id[0] = '*';
+			ent.id[1] = STR_END;
+			break;
+		case '/':
+			ent.id[0] = '/';
+			ent.id[1] = STR_END;
+			break;
+		case '<':
+			ent.id[0] = '<';
+			ent.id[1] = STR_END;
+			break;
+		case '>':
+			ent.id[0] = '>';
+			ent.id[1] = STR_END;
+			break;
+		case '=':
+			ent.id[0] = '=';
+			ent.id[1] = '=';
+			ent.id[2] = STR_END;
+			break;
+		case '!':
+			ent.id[0] = '!';
+			ent.id[1] = '=';
+			ent.id[2] = STR_END;
+			break;
+		default:
+			break;
+		}
+	}
 
 	int OctToInt(std::vector<unsigned char> word)
 	{
@@ -304,7 +358,7 @@ namespace LEX
 		return number;
 	}
 
-	void LexTableOut(LT::LexTable lt)
+	void LexTableOut(LT::LexTable lt, IT::IdTable it)
 	{
 		std::ofstream out;
 		out.open("LexTable.txt");
@@ -313,16 +367,21 @@ namespace LEX
 		out << "0000 ";
 		for (int i = 0; i < lt.size; ++i)
 		{
-			if (lt.table[i].sn > line)
+			if (lt.table[i].lexema != NULL)
 			{
-				out << "\n";
-				line = lt.table[i].sn;
-				if (line < 10)out << "000";
-				if (line < 100 && line >= 10)out << "00";
-				if (line >= 100 && line < 1000)out << "0";
-				out << line << " ";
+				if (lt.table[i].sn > line)
+				{
+					out << "\n";
+					line = lt.table[i].sn;
+					if (line < 10)out << "000";
+					if (line < 100 && line >= 10)out << "00";
+					if (line >= 100 && line < 1000)out << "0";
+					out << line << " ";
+				}
+				out << lt.table[i].lexema;
+				if (lt.table[i].lexema[0] == SEQ)out << it.table[lt.table[i].idxTI].value.vint;
+				else if (lt.table[i].lexema[0] == LEX_OPERATION)out << '{' << it.table[lt.table[i].idxTI].id << '}';
 			}
-			out << lt.table[i].lexema;
 		}
 		out.close();
 	}

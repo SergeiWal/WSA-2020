@@ -1,9 +1,7 @@
 #pragma once
 
-#include "includelib.h"
 #include "Error.h"
-#include <string>
-#include <vector>
+
 
 #define ID_MAXSIZE 8
 #define TI_MAXSIZE 4096
@@ -21,7 +19,7 @@
 namespace IT
 {
 	enum class IDDATATYPE { INT = 1, STR = 2, BL = 3, NONE = 4 };
-	enum class IDTYPE { V = 1, F = 2, P = 3, A = 4, L = 5, C = 6, NONE = 7 };
+	enum class IDTYPE { V = 1, F = 2, P = 3, A = 4, L = 5, C = 6, O =7, NONE = 8 };
 	//v- переменная;f-функция;p-процедура;a-параметр функции\процедуры;
 	//l- литерал;c - вызов функции\процедуры;none-неопределённое значение;
 

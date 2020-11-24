@@ -1,5 +1,3 @@
-#require 'standart.txt';
-
 func short userFunc(short a, short b)
 {
 	var short c;

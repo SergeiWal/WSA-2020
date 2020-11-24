@@ -1,6 +1,5 @@
 #pragma once
 
-#include "includelib.h"
 #include "Error.h"
 
 #define LEXEMA_FIXSIZE 1 

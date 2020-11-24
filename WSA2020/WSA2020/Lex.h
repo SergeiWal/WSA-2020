@@ -3,12 +3,13 @@
 #include <stack>
 #include <set>
 
-#include "includelib.h"
 #include "Error.h"
 #include "In.h"
 #include "FST.h"
 #include "LT.h"
 #include "IT.h"
+
+#define SEQ '@'
 
 #define TOKENS_ARRAY_SIZE 15
 
@@ -186,7 +187,7 @@ namespace LEX
 		LT::LexTable lextable;
 		IT::IdTable  idtable;
 		std::set<char> one_symbol_lexems = { LEX_SEMICOLON,LEX_COMA,LEX_LEFTBRACE,LEX_BRACELET,LEX_LEFTHESIS,
-												LEX_RIGHTHESIS,LEX_EQUALL, LEX_LESS,LEX_MORE, LEX_CALL };
+												LEX_RIGHTHESIS,LEX_EQUALL, LEX_CALL };
 	};
 
 	LexType LAnaliz( In::word word);
@@ -199,11 +200,12 @@ namespace LEX
 	void SetDefaultValue(IT::Entry& ent);
 	void SetLiteralValue(IT::Entry& ent, const std::vector<unsigned char>& word);
 	void SetLiteralName(IT::Entry& ent, int number);
+	void SetOperatorValue(IT::Entry& ent, char ch);
 
 	int OctToInt(std::vector<unsigned char> word);
 	int BinToInt(std::vector<unsigned char> word);
 
 	void TableFill(In::IN in, LEX& lex);
-	void LexTableOut(LT::LexTable lt);
+	void LexTableOut(LT::LexTable lt, IT::IdTable it);
 	void IdTableOut(IT::IdTable it);
 }

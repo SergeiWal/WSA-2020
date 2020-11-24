@@ -2,6 +2,8 @@
 #include "Log.h"
 #include "In.h"
 #include "Lex.h"
+#include  "MFST.h"
+#include "PBN.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -15,12 +17,19 @@ int _tmain(int argc, _TCHAR* argv[])
 		Log::WriteLog(log);
 		Log::WriteParm(log, parm);
 		In::IN in = In::getin(parm.in);
-		In::WriteInputTextInConsole(in);
 		LEX::LEX lex;
-		lex.lextable = LT::Create(in.text.size());
+		lex.lextable = LT::Create(LT_MAXSIZE);
 		lex.idtable = IT::Create(in.text.size());
 		LEX::TableFill(in, lex);
-		LEX::LexTableOut(lex.lextable);
+		LEX::LexTableOut(lex.lextable, lex.idtable);
+		LEX::IdTableOut(lex.idtable);
+		/*MFST_TRACE_START
+			MFST::Mfst mfst(lex, GRB::getGreibach());
+		mfst.start();
+		mfst.savededucation();
+		mfst.printrules();*/
+		PBN::BuildCodeInPN(lex);
+		LEX::LexTableOut(lex.lextable, lex.idtable);
 		LEX::IdTableOut(lex.idtable);
 		Log::WriteIn(log, in);
 		std::cout << std::endl;
