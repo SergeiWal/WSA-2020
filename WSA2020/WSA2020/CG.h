@@ -14,17 +14,22 @@
 #define EXIT_PROC "ExitProcces PROTO :DWORD"
 #define STACK ".stack 4096"
 #define CONST ".const"
-#define RET "ret_"
 #define BYTE "byte"
-#define WORD_TYPE "word"
+#define SHORT "sword"
 #define TRUE '1'
 #define FALSE '0'
+#define DATA ".data"
+#define RET "ret_"
+#define CODE_BLOCK ".code"
 
 
 namespace CG
 {
 	std::ofstream* CreateAsmFile();
 	void ConstBlockFill(std::ofstream* file, IT::IdTable it);
+	void SetDataValue(std::ofstream* file, IT::IdTable it, int pos);
 	void DataBLockFILL(std::ofstream* file, IT::IdTable it);
+	void generationOperation(std::ofstream* file, char opr, IT::IDDATATYPE type, int number, bool isBinary );
+	void CodeBlockFILL(std::ofstream* file, IT::IdTable it, LT::LexTable lt);
 	void CloseFile(std::ofstream* file);
 };
