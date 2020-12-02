@@ -4,6 +4,7 @@
 #include "Lex.h"
 #include  "MFST.h"
 #include "PBN.h"
+#include "CG.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -31,6 +32,12 @@ int _tmain(int argc, _TCHAR* argv[])
 		PBN::BuildCodeInPN(lex);
 		LEX::LexTableOut(lex.lextable, lex.idtable);
 		LEX::IdTableOut(lex.idtable);
+		std::ofstream* file = CG::CreateAsmFile();
+		CG::ConstBlockFill(file, lex.idtable);
+		CG::DataBLockFILL(file, lex.idtable);
+		CG::CodeBlockFILL(file, lex.idtable, lex.lextable);
+		CG::asmMain(file);
+		CG::CloseFile(file);
 		Log::WriteIn(log, in);
 		std::cout << std::endl;
 	}

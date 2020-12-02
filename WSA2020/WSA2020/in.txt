@@ -25,13 +25,12 @@ main
 	v1 = 0b1100;
 	v2 = 0b100;
 	b1 = false;
-	b2 = v1;
-	buf = (short)v1;
+	b2 = b1;
 	TCHAR = 1b11;
 
 	var short v3;
 
-	v3 = (v1 + b1)*v1/v2;
+	v3 = (v1 + v2)*v1/v2;
 	var short i;
 	i = 0b0;
 	while(i < v3)

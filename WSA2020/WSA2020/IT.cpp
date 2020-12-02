@@ -51,17 +51,17 @@ namespace IT
 			{
 			case IT::IDDATATYPE::BL:
 				for (int i = 0; i < idtable.size; ++i)
-					if (ent.idtype == IT::IDTYPE::L && idtable.table[i].value.vbool == ent.value.vbool)
+					if (idtable.table[i].idtype == IT::IDTYPE::L && idtable.table[i].value.vbool == ent.value.vbool)
 						return i;
 				break;
 			case IT::IDDATATYPE::INT:
 				for (int i = 0; i < idtable.size; ++i)
-					if (ent.idtype == IT::IDTYPE::L && idtable.table[i].value.vint == ent.value.vint)
+					if (idtable.table[i].idtype == IT::IDTYPE::L && idtable.table[i].value.vint == ent.value.vint)
 						return i;
 				break;
 			case IT::IDDATATYPE::STR:
 				for (int i = 0; i < idtable.size; ++i)
-					if (ent.idtype == IT::IDTYPE::L &&
+					if (idtable.table[i].idtype == IT::IDTYPE::L &&
 						strcmp((char*)idtable.table[i].value.vstr.str, (char*)ent.value.vstr.str) == 0)
 						return i;
 				break;

@@ -10,7 +10,8 @@
 #define FILENAME "gen.asm"
 #define PROC_SERIES ".586"
 #define MODEL ".model flat, stdcall"
-#define KERNEL_LIB "includelib kernel32.lib"
+#define LIBRARY "includelib kernel32.lib\n"\
+				"includelib libucrt.lib\n"
 #define EXIT_PROC "ExitProcces PROTO :DWORD"
 #define STACK ".stack 4096"
 #define CONST ".const"
@@ -21,6 +22,7 @@
 #define DATA ".data"
 #define RET "ret_"
 #define CODE_BLOCK ".code"
+#define SAVE_REGISTRS "uses eax ebx ecx edi esi "
 
 
 namespace CG
@@ -31,5 +33,6 @@ namespace CG
 	void DataBLockFILL(std::ofstream* file, IT::IdTable it);
 	void generationOperation(std::ofstream* file, char opr, IT::IDDATATYPE type, int number, bool isBinary );
 	void CodeBlockFILL(std::ofstream* file, IT::IdTable it, LT::LexTable lt);
+	void asmMain(std::ofstream* file);
 	void CloseFile(std::ofstream* file);
 };

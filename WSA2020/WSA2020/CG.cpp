@@ -7,14 +7,14 @@ namespace CG
 		std::ofstream* stream = new std::ofstream;
 		stream->open(FILENAME);
 		if (!stream->is_open())throw ERROR_THROW(124);
-		*stream << PROC_SERIES << ENDL << MODEL << ENDL << KERNEL_LIB
-			<< ENDL << EXIT_PROC << ENDL << STACK;
+		*stream << PROC_SERIES << ENDL << MODEL << ENDL << LIBRARY
+			<< ENDL << EXIT_PROC << ENDL << STACK << ENDL;
 		return stream;
 	}
 
 	void ConstBlockFill(std::ofstream* file, IT::IdTable it)
 	{
-		*file << STACK << ENDL;
+		*file << CONST << ENDL;
 		for (int i = 0; i < it.size; ++i)
 		{
 			if (it.table[i].idtype == IT::IDTYPE::L && it.table[i].id != NULL)
@@ -186,10 +186,13 @@ namespace CG
 		bool isMain = false;
 		bool isCycle = false;
 		bool isWrite = false;
+		bool isReturn = false;
 		bool isBinary = true;
 		int resultBufferIdx = -1;		//индекс переменной назначения, если -1 то не активен
 		int parameterCount;				//кол-во параметров вызова функции
 		std::string currentCycleName;   //имя цикла - используется для создания меток
+		std::string funcName;			//имя текущей функции		
+		IT::IDDATATYPE currentType = IT::IDDATATYPE::NONE;			//тип данных  последнего идентификатора
 
 		*file << CODE_BLOCK << ENDL;
 
@@ -198,6 +201,7 @@ namespace CG
 			switch (lt.table[i].lexema[0])
 			{
 			case LEX_ID:
+				currentType = it.table[lt.table[i].idxTI].iddatatype;
 				if (lt.table[i + 1].lexema[0] == LEX_EQUALL)
 				{
 					resultBufferIdx = i;
@@ -227,29 +231,99 @@ namespace CG
 						<< '_' << it.table[lt.table[i].idxTI].id << ENDL;
 				}
 				--i;
-				*file << "call " << it.table[lt.table[i].idxTI].visibilityRegion
-					<< '_' << it.table[lt.table[i].idxTI].id << ENDL;
-				i = parameterCount + 1;
+				*file << "call " << it.table[lt.table[i].idxTI].id << ENDL;
+				i += parameterCount + 1;
 				break;
 			case LEX_OPERATION:
 				if (lt.table[i - 2].lexema[0] == LEX_EQUALL)isBinary = false;
-				generationOperation(file, it.table[lt.table[i].idxTI].id[0], it.table[lt.table[i].idxTI].iddatatype,i, isBinary);
+				generationOperation(file, it.table[lt.table[i].idxTI].id[0], currentType, i, isBinary);
 				isBinary = true;
 				break;
 			case LEX_FUNCTION:
-				break;
+				i++;
 			case LEX_PROC:
+				i++;
+				*file << (funcName = it.table[lt.table[i].idxTI].id) << " PROC " << SAVE_REGISTRS << ENDL;
+				while (lt.table[i].lexema[0] != LEX_RIGHTHESIS)++i;
+				parameterCount = i;//немного не по назначению
+				while (lt.table[i].lexema[0] != LEX_LEFTHESIS)
+				{
+					if (lt.table[i].lexema[0] == LEX_ID)*file << "pop "
+						<< it.table[lt.table[i].idxTI].visibilityRegion
+						<< '_' << it.table[lt.table[i].idxTI].id << ENDL;
+					--i;
+				}
+				i = parameterCount;
 				break;
 			case LEX_RETURN:
+				isReturn = true;
 				break;
-			case LEX_CYCLE:
+			case LEX_SEMICOLON:
+				if (resultBufferIdx != -1)
+				{
+					*file << "pop " << it.table[lt.table[resultBufferIdx].idxTI].visibilityRegion
+						<< '_' << it.table[lt.table[resultBufferIdx].idxTI].id << ENDL;
+					resultBufferIdx = -1;
+				}
+				else if (isReturn)
+				{
+					*file << "pop eax" << ENDL << "mov " << RET << funcName << LEX_COMA << "eax" << ENDL
+						<< "ret" << ENDL;
+					isReturn = false;
+				}
 				break;
 			case LEX_MAIN:
+				*file << "SWA2020 PROC " << SAVE_REGISTRS << ENDL;
+				funcName = "SWA2020";
+				isMain = true;
+				break;
+			case LEX_LEFTBRACE:
+				if (isCycle)
+				{
+					*file << "pop eax" << ENDL
+						<< "cmp eax,1" << ENDL << "jz " << currentCycleName << "_BEGIN" << ENDL
+						<< "jnz " << currentCycleName << "_END" << ENDL;
+				}
+				break;
+			case LEX_BRACELET:
+				if (!isCycle)
+				{
+					if (isMain)
+					{
+						isMain = false;
+						*file << "push 0h" << ENDL;
+					}
+					*file << funcName << " ENDP" << ENDL;
+				}
+				else
+				{
+					*file << "jmp " << currentCycleName << ENDL
+						<< currentCycleName << "_END: " << ENDL;
+					isCycle = false;
+				}
+				break;
+			case LEX_CYCLE:
+				isCycle = true;
+				currentCycleName = "CYCLE_" + std::to_string(i);
+				*file << currentCycleName << ": " << ENDL;
+				break;
+			case LEX_VAR:
+				i += 2;
+				break;
+			case LEX_WRITE:
+				while (lt.table[i + 1].lexema[0] != LEX_SEMICOLON)i++;
 				break;
 			default:
 				break;
 			}
 		}
+	}
+
+	void asmMain(std::ofstream* file)
+	{
+		*file << "main PROC" << ENDL << ENDL << "call WSA2020" << ENDL
+			<< "push eax" << ENDL << "call ExitProcess" << ENDL
+			<< "main ENDP" << ENDL << "end main";
 	}
 
 	void CloseFile(std::ofstream* file)

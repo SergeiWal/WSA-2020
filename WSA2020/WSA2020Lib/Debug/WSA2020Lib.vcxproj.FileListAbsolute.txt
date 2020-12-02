@@ -1,0 +1,2 @@
+D:\GIT\WSA-2020_course_project\WSA2020\Debug\WSA2020Lib.pdb
+D:\GIT\WSA-2020_course_project\WSA2020\WSA2020Lib\Debug\WSA2020Lib.pdb
