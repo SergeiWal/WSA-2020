@@ -1,12 +1,7 @@
-﻿Сборка начата 02.12.2020 22:34:11.
-Уровень детализации журнала: Normal.     1>Проект "D:\GIT\WSA-2020_course_project\WSA2020\WSA2020Lib\WSA2020Lib.vcxproj" в узле 2 (целевые объекты Rebuild).
-     1>_PrepareForClean:
-         Файл "Debug\WSA2020Lib.tlog\WSA2020Lib.lastbuildstate" удаляется.
-       CoreClean:
-         Файл "D:\GIT\WSA-2020_course_project\WSA2020\Debug\WSA2020Lib.pdb" удаляется.
-         Файл "D:\GIT\WSA-2020_course_project\WSA2020\WSA2020Lib\Debug\WSA2020Lib.pdb" удаляется.
-       InitializeBuildStatus:
-         Создание "Debug\WSA2020Lib.tlog\unsuccessfulbuild", так как было задано "AlwaysCreate".
+﻿Сборка начата 06.12.2020 0:19:02.
+Уровень детализации журнала: Normal.     1>Проект "D:\GIT\WSA-2020_course_project\WSA2020\WSA2020Lib\WSA2020Lib.vcxproj" в узле 2 (целевые объекты Build).
+     1>InitializeBuildStatus:
+         Обращение к "Debug\WSA2020Lib.tlog\unsuccessfulbuild".
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\bin\HostX86\x86\CL.exe /c /ZI /JMC /nologo /W3 /WX- /diagnostics:column /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS- /fp:precise /permissive- /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\WSA2020Lib.pdb" /Gd /TP /analyze- /FC /errorReport:prompt WSA2020Lib.cpp
      1>cl : командная строка warning D9025: переопределение "/sdl" на "/GS-"
@@ -19,15 +14,15 @@
        FinalizeBuildStatus:
          Файл "Debug\WSA2020Lib.tlog\unsuccessfulbuild" удаляется.
          Обращение к "Debug\WSA2020Lib.tlog\WSA2020Lib.lastbuildstate".
-     1>Сборка проекта "D:\GIT\WSA-2020_course_project\WSA2020\WSA2020Lib\WSA2020Lib.vcxproj" завершена (целевые объекты Rebuild).
+     1>Сборка проекта "D:\GIT\WSA-2020_course_project\WSA2020\WSA2020Lib\WSA2020Lib.vcxproj" завершена (целевые объекты Build).
 
 Сборка успешно завершена.
 
-       "D:\GIT\WSA-2020_course_project\WSA2020\WSA2020Lib\WSA2020Lib.vcxproj" (целевой объект Rebuild ) (1) ->
+       "D:\GIT\WSA-2020_course_project\WSA2020\WSA2020Lib\WSA2020Lib.vcxproj" (целевой объект Build ) (1) ->
        (Целевой объект ClCompile) -> 
          cl : командная строка warning D9025: переопределение "/sdl" на "/GS-"
 
     Предупреждений: 1
     Ошибок: 0
 
-Прошло времени 00:00:00.93
+Прошло времени 00:00:00.87
