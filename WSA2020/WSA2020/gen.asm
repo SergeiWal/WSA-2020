@@ -1,7 +1,7 @@
 .586
 .model flat, stdcall
-includelib kernel32.lib
 includelib libucrt.lib
+includelib kernel32.lib
 includelib WSA2020Lib.lib
 
 ExitProcess PROTO :DWORD
@@ -11,7 +11,7 @@ EXTRN concat :proc
 EXTRN writeNumberBin :proc
 EXTRN writeNumberOct :proc
 EXTRN writeStr :proc
-
+EXTRN writeBool :proc
 .stack 4096
 .const
 global_Ltr_35 sword 668
@@ -87,9 +87,10 @@ push userFunc_c
 pop ax
 mov ret_userFunc,ax
 ret
-ret
 userFunc ENDP
 userProc PROC uses eax ebx ecx edi esi 
+push global_Ltr_35
+call writeNumberBin
 ret
 userProc ENDP
 WSA2020 PROC uses eax ebx ecx edi esi 
@@ -154,6 +155,8 @@ cmp eax,1
 jz CYCLE_124_BEGIN
 jnz CYCLE_124_END
 CYCLE_124_BEGIN: 
+push main_i
+call writeNumberBin
 push main_i
 push global_Ltr_138
 pop bx

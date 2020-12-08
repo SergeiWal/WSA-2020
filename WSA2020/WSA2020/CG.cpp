@@ -194,6 +194,7 @@ namespace CG
 		bool isCycle = false;
 		bool isWrite = false;
 		bool isReturn = false;
+		bool isExpr = false;
 		bool isBinary = true;
 		int resultBufferIdx = -1;		//индекс переменной назначения, если -1 то не активен
 		int parameterCount;				//кол-во параметров вызова функции
@@ -230,7 +231,7 @@ namespace CG
 				}
 				break;
 			case LEX_LITERAL:
-				//currentType = it.table[lt.table[i].idxTI].iddatatype;
+				currentType = it.table[lt.table[i].idxTI].iddatatype;
 				if (currentType != IT::IDDATATYPE::STR)
 				{
 					*file << "push " << it.table[lt.table[i].idxTI].visibilityRegion
@@ -270,9 +271,27 @@ namespace CG
 				}
 				--i;
 				*file << "call " << it.table[lt.table[i].idxTI].id << ENDL;
+				if (it.table[lt.table[i].idxTI].idtype == IT::IDTYPE::F && (resultBufferIdx!=-1 || isExpr || isWrite))
+				{
+					switch (it.table[lt.table[i].idxTI].iddatatype)
+					{
+					case IT::IDDATATYPE::BL:
+					case IT::IDDATATYPE::INT:
+						*file << "push " << RET << it.table[lt.table[i].idxTI].id << ENDL;
+						break;
+					case IT::IDDATATYPE::STR:
+						currentType = IT::IDDATATYPE::STR;
+						*file << "push offset " << RET << it.table[lt.table[i].idxTI].id << ENDL;
+						*file << "push lengthof " << RET << it.table[lt.table[i].idxTI].id << ENDL;
+						break;
+					default:
+						break;
+					}
+				}
 				i += parameterCount + 1;
 				break;
 			case LEX_OPERATION:
+				isExpr = true;
 				if (lt.table[i - 2].lexema[0] == LEX_EQUALL)isBinary = false;
 				generationOperation(file, it.table[lt.table[i].idxTI].id[0], currentType, i, isBinary);
 				isBinary = true;
@@ -308,10 +327,33 @@ namespace CG
 				}
 				else if (isReturn)
 				{
-					*file << "pop ax" << ENDL << "mov " << RET << funcName << LEX_COMA << "ax" << ENDL
-						<< "ret" << ENDL;
+					if (currentType != IT::IDDATATYPE::STR)
+						*file << "pop ax" << ENDL << "mov " << RET << funcName << LEX_COMA << "ax" << ENDL;
+					else *file << "cld\npop ecx\npop esi\nlea edi, " << RET << funcName << ENDL
+						<< "rep movsb" << ENDL ;
+
 					isReturn = false;
 				}
+				else if (isWrite)
+				{
+					switch (currentType)
+					{
+					case IT::IDDATATYPE::INT:
+						*file << "call writeNumberBin" << ENDL;
+						break;
+					case IT::IDDATATYPE::BL:
+						*file  << "call writeBool" << ENDL;
+						break;
+					case IT::IDDATATYPE::STR:
+						*file << "call writeNumberBin" << ENDL;
+						break;
+					default:
+						break;
+					}
+
+					isWrite = false;
+				}
+				isExpr = false;
 				break;
 			case LEX_MAIN:
 				*file << "WSA2020 PROC " << SAVE_REGISTRS << ENDL;
@@ -331,7 +373,7 @@ namespace CG
 				if (!isCycle)
 				{
 					if (isMain)isMain = false;
-					*file <<"ret" << ENDL << funcName << " ENDP" << ENDL;
+					*file << "ret" << ENDL << funcName << " ENDP" << ENDL;
 				}
 				else
 				{
@@ -349,7 +391,7 @@ namespace CG
 				i += 2;
 				break;
 			case LEX_WRITE:
-				while (lt.table[i + 1].lexema[0] != LEX_SEMICOLON)i++;
+				isWrite = true;
 				break;
 			default:
 				break;

@@ -11,15 +11,16 @@
 #define FILENAME "gen.asm"
 #define PROC_SERIES ".586"
 #define MODEL ".model flat, stdcall"
-#define LIBRARY "includelib kernel32.lib\n"\
-				"includelib libucrt.lib\n"\
+#define LIBRARY "includelib libucrt.lib\n"\
+				"includelib kernel32.lib\n"\
 				"includelib WSA2020Lib.lib\n"
 #define STLIB_FUNC  "EXTRN random :proc\n"\
 					"EXTRN len :proc\n"\
 					"EXTRN concat :proc\n"\
 					"EXTRN writeNumberBin :proc\n"\
 					"EXTRN writeNumberOct :proc\n"\
-					"EXTRN writeStr :proc\n"
+					"EXTRN writeStr :proc\n"\
+					"EXTRN writeBool :proc"
 #define EXIT_PROC "ExitProcess PROTO :DWORD"
 #define STACK ".stack 4096"
 #define CONST ".const"

@@ -1,7 +1,7 @@
-﻿Сборка начата 06.12.2020 0:19:02.
+﻿Сборка начата 09.12.2020 1:30:59.
 Уровень детализации журнала: Normal.     1>Проект "D:\GIT\WSA-2020_course_project\WSA2020\WSA2020Lib\WSA2020Lib.vcxproj" в узле 2 (целевые объекты Build).
      1>InitializeBuildStatus:
-         Обращение к "Debug\WSA2020Lib.tlog\unsuccessfulbuild".
+         Создание "Debug\WSA2020Lib.tlog\unsuccessfulbuild", так как было задано "AlwaysCreate".
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\bin\HostX86\x86\CL.exe /c /ZI /JMC /nologo /W3 /WX- /diagnostics:column /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS- /fp:precise /permissive- /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\WSA2020Lib.pdb" /Gd /TP /analyze- /FC /errorReport:prompt WSA2020Lib.cpp
      1>cl : командная строка warning D9025: переопределение "/sdl" на "/GS-"
@@ -25,4 +25,4 @@
     Предупреждений: 1
     Ошибок: 0
 
-Прошло времени 00:00:00.87
+Прошло времени 00:00:01.08

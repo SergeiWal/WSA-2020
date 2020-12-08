@@ -1,5 +1,5 @@
 ﻿#include <iostream>
-#include <string>
+
 
 extern "C"
 {
@@ -12,46 +12,52 @@ extern "C"
 	{
 		return l;
 	}
-
+	 
 	char* concat(char* str1, short l1, char* str2, short l2)
 	{
 		char* buf = new char[256];
-		buf[0] = '\0';
-		strcat_s(buf, 256, str1);
-		strcat_s(buf + strlen(str1), 256, str2);
+		int d = 0, s = 0;
+		for (; d < l1; ++d)buf[d] = str1[d];
+		for (; s < l2; ++s, ++d)buf[d] = str2[s];
+		buf[d] = '\0';
 		return buf;
 	}
 
 	void writeNumberBin(short number)
 	{
-		bool isSign = false;
-		std::string result;
-		if (number < 0)isSign = true;
+		if (number < 0)std::cout << "1b" ;
+		else std::cout << "0b" ;
+
 		do
 		{
-			result = std::to_string(number % 2) + result;
+			std::cout << number % 2;
+			number /= 2;
 		} while (number > 0);
-		if (isSign)result = "1b" + result;
-		else result = "0b" + result;
-		std::cout << result << std::endl;
+		
+		std::cout << std::endl;
 	}
 
 	void writeNumberOct(short number)
 	{
-		bool isSign = false;
-		std::string result;
-		if (number < 0)isSign = true;
+		if (number < 0)std::cout << "1b";
+		else std::cout << "0b";
+
 		do
 		{
-			result = std::to_string(number % 8) + result;
+			std::cout << number % 8;
+			number /= 8;
 		} while (number > 0);
-		if (isSign)result = "1o" + result;
-		else result = "0o" + result;
-		std::cout << result << std::endl;
+
+		std::cout << std::endl;
 	}
 
 	void writeStr(char* str, short l)
 	{
 		std::cout << str << std::endl;
+	}
+	void writeBool(int b)
+	{
+		if (b < 1)std::cout << "false";
+		else std::cout << "true";
 	}
 }
