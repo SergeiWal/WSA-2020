@@ -11,7 +11,7 @@
 
 #define SEQ '@'
 
-#define TOKENS_ARRAY_SIZE 15
+#define TOKENS_ARRAY_SIZE 16
 
 #define STRING			7,\
 						FST::NODE(1, FST::RELATION('s', 1)),\
@@ -153,6 +153,12 @@
 						FST::RELATION('N', 2),FST::RELATION('O', 2),FST::RELATION('P', 2),FST::RELATION('Q', 2),FST::RELATION('R', 2), FST::RELATION('S', 2),FST::RELATION('T', 2),FST::RELATION('U', 2),FST::RELATION('V', 2),FST::RELATION('W', 2),FST::RELATION('X', 2),FST::RELATION('Y', 2),FST::RELATION('Z', 2),\
 						FST::RELATION('0', 2),FST::RELATION('1', 2),FST::RELATION('2', 2),FST::RELATION('3', 2),FST::RELATION('4', 2),FST::RELATION('5', 2),FST::RELATION('6', 2),FST::RELATION('7', 2),FST::RELATION('8', 2),FST::RELATION('9', 2)),\
 						FST::NODE()
+#define EXTRN			6,\
+						FST::NODE(1, FST::RELATION('e', 1)),\
+						FST::NODE(1, FST::RELATION('x', 2)),\
+						FST::NODE(1, FST::RELATION('t', 3)),\
+						FST::NODE(1, FST::RELATION('r', 4)),\
+						FST::NODE()
 
 #define TOKENS_ARRAY  {\
 					  LexExample('s',FST::FST(SHORT),LexType::T),LexExample('s',FST::FST(STRING),LexType::T),\
@@ -162,11 +168,12 @@
 					  LexExample('v',FST::FST(VAR),LexType::V), LexExample('m',FST::FST(MAIN),LexType::M),\
 					  LexExample('f',FST::FST(FUNC),LexType::F), LexExample('p',FST::FST(PROC),LexType::P),\
 					  LexExample('r',FST::FST(RET),LexType::R), LexExample('w',FST::FST(CYCLE),LexType::C), \
-					  LexExample('w',FST::FST(WRITE),LexType::W)} 
+					  LexExample('w',FST::FST(WRITE),LexType::W),  LexExample('e',FST::FST(EXTRN),LexType::E)} 
+
 				
 namespace LEX
 {
-	enum class LexType { T = 1, L = 2, V = 3, M = 4, F = 5, P = 6, R = 7, C = 8, W = 9, O = 10, I = 11 };
+	enum class LexType { T = 1, L = 2, V = 3, M = 4, F = 5, P = 6, R = 7, C = 8, W = 9, O = 10, I = 11, E =12 };
 	
 	struct LexExample
 	{

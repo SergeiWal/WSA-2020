@@ -65,6 +65,8 @@ namespace LEX
 		IT::IDTYPE currentIdType = IT::IDTYPE::NONE;
 		bool isCycle = false;
 
+		bool isMain = false;
+
 		for (int i = 0; i<in.text.size(); ++i)
 		{
 			LT::Entry* ltNewEntry = new LT::Entry;
@@ -82,6 +84,10 @@ namespace LEX
 				lextype = LAnaliz(in.text[i]);
 				switch (lextype)
 				{
+				case LexType::E:
+					currentIdType = IT::IDTYPE::E;
+					SetNewLtNodeValue(*ltNewEntry, LEX_EXTR);
+					break;
 				case LexType::F:
 					currentIdType = IT::IDTYPE::F;
 					SetNewLtNodeValue(*ltNewEntry, LEX_FUNCTION);
@@ -134,6 +140,8 @@ namespace LEX
 				case LexType::M:
 					visibleRegions.push(MAIN_VISIBLE);
 					SetNewLtNodeValue(*ltNewEntry, LEX_MAIN);
+					if (!isMain)isMain = true;
+					else throw ERROR_THROW_IN(130, in.text[i].line, in.text[i].begin);
 					break;
 				case LexType::O:
 					currentIdDataType = IT::IDDATATYPE::NONE;
@@ -179,6 +187,8 @@ namespace LEX
 			}
 			LT::Add(lex.lextable, *ltNewEntry);
 		}
+
+		if (!isMain)throw ERROR_THROW_IN(129, 0, 0);
 	}
 
 	void IsParametrSet(IT::Entry& ent, char nextCh)

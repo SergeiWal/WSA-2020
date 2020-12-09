@@ -20,8 +20,9 @@
 					"EXTRN writeNumberBin :proc\n"\
 					"EXTRN writeNumberOct :proc\n"\
 					"EXTRN writeStr :proc\n"\
-					"EXTRN writeBool :proc"
-#define EXIT_PROC "ExitProcess PROTO :DWORD"
+					"EXTRN writeBool :proc\n"
+#define EXIT_PROC "ExitProcess PROTO :DWORD\n"\
+				  "SetConsoleOutputCP PROTO :DWORD\n"
 #define STACK ".stack 4096"
 #define CONST ".const"
 #define BYTE "byte"
@@ -33,6 +34,9 @@
 #define RET "ret_"
 #define CODE_BLOCK ".code"
 #define SAVE_REGISTRS "uses eax ebx ecx edi esi "
+#define SAVE_BASE "push ebp\n mov ebp, esp\n"
+#define BASE_RECOVERY "mov esp, ebp\n pop ebp"
+#define W1251_SET "push 1251\n call SetConsoleOutputCP\n"
 
 
 namespace CG

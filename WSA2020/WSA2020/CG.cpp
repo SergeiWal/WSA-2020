@@ -250,10 +250,13 @@ namespace CG
 				while (lt.table[i].lexema[0] != SEQ)i++;
 				parameterCount = it.table[lt.table[i].idxTI].value.vint;
 				//проверка на колво
+				if (parameterCount != parametrs[it.table[lt.table[idxBuf].idxTI].id].size())throw ERROR_THROW_IN(132, lt.table[idxBuf].sn, 0);
 				for (int j = parameterCount, k =0; j > 0; --j, k++)
 				{ 
 					--i;
 					//проверка на совпадение типов
+					if (it.table[lt.table[i].idxTI].iddatatype != parametrs[it.table[lt.table[idxBuf].idxTI].id][k].type)
+						throw ERROR_THROW_IN(133, lt.table[idxBuf].sn, 0);
 					if (it.table[lt.table[i].idxTI].iddatatype != IT::IDDATATYPE::STR)
 					{
 						*file << "mov ax," << it.table[lt.table[i].idxTI].visibilityRegion
@@ -276,7 +279,11 @@ namespace CG
 					switch (it.table[lt.table[i].idxTI].iddatatype)
 					{
 					case IT::IDDATATYPE::BL:
+						currentType = IT::IDDATATYPE::BL;
+						*file << "push " << RET << it.table[lt.table[i].idxTI].id << ENDL;
+						break;
 					case IT::IDDATATYPE::INT:
+						currentType = IT::IDDATATYPE::INT;
 						*file << "push " << RET << it.table[lt.table[i].idxTI].id << ENDL;
 						break;
 					case IT::IDDATATYPE::STR:
@@ -300,7 +307,7 @@ namespace CG
 				i++;
 			case LEX_PROC:
 				i++;
-				*file << (funcName = it.table[lt.table[i].idxTI].id) << " PROC " << SAVE_REGISTRS << ENDL;
+				*file << (funcName = it.table[lt.table[i].idxTI].id) << " PROC " << SAVE_REGISTRS << ENDL << SAVE_BASE << ENDL;
 				while (lt.table[i].lexema[0] != LEX_RIGHTHESIS)++i;
 				parameterCount = i;//немного не по назначению
 				while (lt.table[i].lexema[0] != LEX_LEFTHESIS)
@@ -345,7 +352,7 @@ namespace CG
 						*file  << "call writeBool" << ENDL;
 						break;
 					case IT::IDDATATYPE::STR:
-						*file << "call writeNumberBin" << ENDL;
+						*file << "call writeStr" << ENDL ;
 						break;
 					default:
 						break;
@@ -356,7 +363,7 @@ namespace CG
 				isExpr = false;
 				break;
 			case LEX_MAIN:
-				*file << "WSA2020 PROC " << SAVE_REGISTRS << ENDL;
+				*file << "WSA2020 PROC " << SAVE_REGISTRS << ENDL << SAVE_BASE << ENDL << W1251_SET << ENDL;
 				funcName = "WSA2020";
 				isMain = true;
 				break;
@@ -373,7 +380,7 @@ namespace CG
 				if (!isCycle)
 				{
 					if (isMain)isMain = false;
-					*file << "ret" << ENDL << funcName << " ENDP" << ENDL;
+					*file << BASE_RECOVERY << ENDL << "ret" << ENDL << funcName << " ENDP" << ENDL;
 				}
 				else
 				{

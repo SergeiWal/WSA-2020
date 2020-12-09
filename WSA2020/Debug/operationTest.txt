@@ -1,0 +1,10 @@
+main
+{
+	var short begin;
+	var short end;
+	begin = 0b0;
+	end = 0b100;
+	var short dest;
+	dest = $random(begin, end);
+	write dest;
+}

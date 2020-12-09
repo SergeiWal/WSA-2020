@@ -7,8 +7,10 @@ func short userFunc(short a, short b)
 
 proc userProc(string str)
 {
-	write 0o1234;
+	write str;
 }
+
+extr random(short a, short b);
 
 main
 {
@@ -42,4 +44,6 @@ main
 	$userFunc(0b11, 0b101);
 
 	$userProc(s2);
+	write s1;
 }
+

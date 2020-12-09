@@ -26,6 +26,7 @@
 #define LEX_RIGHTHESIS ')'
 #define LEX_CALL '$'
 #define LEX_EQUALL '='
+#define LEX_EXTR 'e'
 
 namespace LT
 {

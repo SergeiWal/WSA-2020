@@ -1,0 +1,10 @@
+
+main
+{
+	var string s1;
+	var string s2;
+	s1 = 'Hello,';
+	s2 = ' World!';
+	var string s3;
+	write s2;
+}

@@ -7,27 +7,26 @@
 005	*	void	none	112		
 006	userProc	void	none	procedure name		150		global
 007	str	string	''	parameter		31		userProc
-008	Ltr_35	short	668	literal		35		global
-009	s1	string	''	variable name		42		main
-010	s2	string	''	variable name		151		main
-011	v1	short	0	variable name		109		main
-012	v2	short	0	variable name		110		main
-013	b1	bool	false	variable name		94		main
-014	b2	bool	false	variable name		62		main
-015	buf	string	''	variable name		66		main
-016	TCHAR	short	0	variable name		70		main
-017	Ltr_74	string	'Привет, Мир!!!!'	literal		74		global
-018	Ltr_78	string	'Hello, World!!!'	literal		78		global
-019	Ltr_82	short	12	literal		82		global
-020	Ltr_86	short	4	literal		86		global
-021	Ltr_90	bool	false	literal		90		global
-022	Ltr_98	short	-3	literal		98		global
-023	v3	short	0	variable name		126		main
-024	/	void	none	111		
-025	i	short	0	variable name		136		main
-026	Ltr_122	short	0	literal		122		global
-027	<	void	none	127		
-028	Ltr_138	short	1	literal		152		global
-029	Ltr_144	short	3	literal		143		global
-030	Ltr_146	short	5	literal		144		global
-031	Ltr_142	short	2	literal		145		global
+008	s1	string	''	variable name		42		main
+009	s2	string	''	variable name		151		main
+010	v1	short	0	variable name		109		main
+011	v2	short	0	variable name		110		main
+012	b1	bool	false	variable name		94		main
+013	b2	bool	false	variable name		62		main
+014	buf	string	''	variable name		66		main
+015	TCHAR	short	0	variable name		70		main
+016	Ltr_74	string	'Привет, Мир!!!!'	literal		74		global
+017	Ltr_78	string	'Hello, World!!!'	literal		78		global
+018	Ltr_82	short	12	literal		82		global
+019	Ltr_86	short	4	literal		86		global
+020	Ltr_90	bool	false	literal		90		global
+021	Ltr_98	short	-3	literal		98		global
+022	v3	short	0	variable name		126		main
+023	/	void	none	111		
+024	i	short	0	variable name		136		main
+025	Ltr_122	short	0	literal		122		global
+026	<	void	none	127		
+027	Ltr_138	short	1	literal		152		global
+028	Ltr_144	short	3	literal		143		global
+029	Ltr_146	short	5	literal		144		global
+030	Ltr_142	short	2	literal		145		global

@@ -5,6 +5,8 @@ includelib kernel32.lib
 includelib WSA2020Lib.lib
 
 ExitProcess PROTO :DWORD
+SetConsoleOutputCP PROTO :DWORD
+
 EXTRN random :proc
 EXTRN len :proc
 EXTRN concat :proc
@@ -12,10 +14,9 @@ EXTRN writeNumberBin :proc
 EXTRN writeNumberOct :proc
 EXTRN writeStr :proc
 EXTRN writeBool :proc
+
 .stack 4096
 .const
-global_Ltr_35 sword 668
-
 global_Ltr_74 byte "Привет, Мир!!!!",0
 
 global_Ltr_78 byte "Hello, World!!!",0
@@ -71,6 +72,9 @@ main_v3 sword 0
 main_i sword 0
 .code
 userFunc PROC uses eax ebx ecx edi esi 
+push ebp
+ mov ebp, esp
+
 push userFunc_c
 push userFunc_a
 push userFunc_b
@@ -86,14 +90,28 @@ pop userFunc_c
 push userFunc_c
 pop ax
 mov ret_userFunc,ax
+mov esp, ebp
+ pop ebp
 ret
 userFunc ENDP
 userProc PROC uses eax ebx ecx edi esi 
-push global_Ltr_35
-call writeNumberBin
+push ebp
+ mov ebp, esp
+
+push offset userProc_str
+push lengthof userProc_str
+call writeStr
+mov esp, ebp
+ pop ebp
 ret
 userProc ENDP
 WSA2020 PROC uses eax ebx ecx edi esi 
+push ebp
+ mov ebp, esp
+
+push 1251
+ call SetConsoleOutputCP
+
 push offset global_Ltr_74
 push lengthof global_Ltr_74
 cld
@@ -177,6 +195,11 @@ lea edi,userProc_str
 lea esi,main_s2
 rep movsb
 call userProc
+push offset main_s1
+push lengthof main_s1
+call writeStr
+mov esp, ebp
+ pop ebp
 ret
 WSA2020 ENDP
 main PROC

@@ -5,15 +5,15 @@ extern "C"
 {
 	int random(short a, short b)
 	{
-		return rand() % (b - a + 1) + a;
+		return rand() % (a - b + 1) + b;
 	}
 
-	int len(char* str, short l)
+	int len(short l, char* str)
 	{
 		return l;
 	}
 	 
-	char* concat(char* str1, short l1, char* str2, short l2)
+	char* concat(short l1, char* str1, short l2, char* str2)
 	{
 		char* buf = new char[256];
 		int d = 0, s = 0;
@@ -27,37 +27,51 @@ extern "C"
 	{
 		if (number < 0)std::cout << "1b" ;
 		else std::cout << "0b" ;
-
+		int dest[16];
+		int len = 0;
 		do
 		{
-			std::cout << number % 2;
+			dest[len] = number % 2;
 			number /= 2;
+			len++;
 		} while (number > 0);
+		len--;
+
+		for (; len >= 0; --len)std::cout << dest[len];
 		
 		std::cout << std::endl;
 	}
 
 	void writeNumberOct(short number)
 	{
-		if (number < 0)std::cout << "1b";
-		else std::cout << "0b";
-
+		if (number < 0)std::cout << "1o";
+		else std::cout << "0o";
+		int dest[16];
+		int len = 0;
 		do
 		{
-			std::cout << number % 8;
+			dest[len] = number % 8;
 			number /= 8;
+			len++;
 		} while (number > 0);
+		len--;
+
+		for (; len >= 0; --len)std::cout << dest[len];
 
 		std::cout << std::endl;
 	}
+	
 
-	void writeStr(char* str, short l)
+	void  writeStr(short l, char* str)
 	{
 		std::cout << str << std::endl;
+
 	}
+
 	void writeBool(int b)
 	{
 		if (b < 1)std::cout << "false";
 		else std::cout << "true";
 	}
+		
 }
