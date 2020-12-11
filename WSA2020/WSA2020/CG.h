@@ -14,11 +14,8 @@
 #define LIBRARY "includelib libucrt.lib\n"\
 				"includelib kernel32.lib\n"\
 				"includelib WSA2020Lib.lib\n"
-#define STLIB_FUNC  "EXTRN random :proc\n"\
-					"EXTRN len :proc\n"\
-					"EXTRN concat :proc\n"\
+#define STLIB_FUNC  "EXTRN concat :proc\n"\
 					"EXTRN writeNumberBin :proc\n"\
-					"EXTRN writeNumberOct :proc\n"\
 					"EXTRN writeStr :proc\n"\
 					"EXTRN writeBool :proc\n"
 #define EXIT_PROC "ExitProcess PROTO :DWORD\n"\
@@ -51,6 +48,7 @@ namespace CG
 
 
 	std::ofstream* CreateAsmFile();
+	void ExtrnFuncAdd(std::ofstream* file, IT::IdTable it, LT::LexTable lt);
 	void ConstBlockFill(std::ofstream* file, IT::IdTable it);
 	void SetDataValue(std::ofstream* file, IT::IdTable it, int pos);
 	void DataBLockFILL(std::ofstream* file, IT::IdTable it);

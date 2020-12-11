@@ -7,37 +7,35 @@ includelib WSA2020Lib.lib
 ExitProcess PROTO :DWORD
 SetConsoleOutputCP PROTO :DWORD
 
-EXTRN random :proc
-EXTRN len :proc
 EXTRN concat :proc
 EXTRN writeNumberBin :proc
-EXTRN writeNumberOct :proc
 EXTRN writeStr :proc
 EXTRN writeBool :proc
 
+EXTRN random :proc
 .stack 4096
 .const
-global_Ltr_74 byte "Привет, Мир!!!!",0
+global_Ltr_85 byte "Привет, Мир!!!!",0
 
-global_Ltr_78 byte "Hello, World!!!",0
+global_Ltr_89 byte "Hello, World!!!",0
 
-global_Ltr_82 sword 12
+global_Ltr_93 sword 12
 
-global_Ltr_86 sword 4
+global_Ltr_97 sword 4
 
-global_Ltr_90 word 0
+global_Ltr_101 word 0
 
-global_Ltr_98 sword -3
+global_Ltr_109 sword -3
 
-global_Ltr_122 sword 0
+global_Ltr_133 sword 0
 
-global_Ltr_138 sword 1
+global_Ltr_149 sword 1
 
-global_Ltr_144 sword 3
+global_Ltr_167 sword 3
 
-global_Ltr_146 sword 5
+global_Ltr_169 sword 5
 
-global_Ltr_142 sword 2
+global_Ltr_155 sword 2
 
 .data
 ;-------------------userFunc return value -----------------
@@ -48,6 +46,10 @@ userFunc_a sword 0
 userFunc_b sword 0
 ;------variable-------------c--------------variable--------
 userFunc_c sword 0
+;-------------------random parameters data -----------------
+random_a sword 0
+;-------------------random parameters data -----------------
+random_b sword 0
 ;-------------------userProc parameters data -----------------
 userProc_str   byte 255 dup ("0"), 0
 ;------variable-------------s1--------------variable--------
@@ -112,29 +114,29 @@ push ebp
 push 1251
  call SetConsoleOutputCP
 
-push offset global_Ltr_74
-push lengthof global_Ltr_74
+push offset global_Ltr_85
+push lengthof global_Ltr_85
 cld
 pop ecx
 pop esi
 lea edi, main_s1
 rep movsb
-push offset global_Ltr_78
-push lengthof global_Ltr_78
+push offset global_Ltr_89
+push lengthof global_Ltr_89
 cld
 pop ecx
 pop esi
 lea edi, main_s2
 rep movsb
-push global_Ltr_82
+push global_Ltr_93
 pop main_v1
-push global_Ltr_86
+push global_Ltr_97
 pop main_v2
-push global_Ltr_90
+push global_Ltr_101
 pop main_b1
 push main_b1
 pop main_b2
-push global_Ltr_98
+push global_Ltr_109
 pop main_TCHAR
 push main_v1
 push main_v2
@@ -154,41 +156,52 @@ pop ax
 imul bx
 push ax
 pop main_v3
-push global_Ltr_122
+push global_Ltr_133
 pop main_i
-CYCLE_124: 
+CYCLE_135: 
 push main_i
 push main_v3
 pop bx
 pop ax
 cmp ax,bx
-js true_127
+js true_138
 push 0
-jmp end_127
-true_127: 
+jmp end_138
+true_138: 
 	 push 1
-end_127: 
+end_138: 
 pop eax
 cmp eax,1
-jz CYCLE_124_BEGIN
-jnz CYCLE_124_END
-CYCLE_124_BEGIN: 
+jz CYCLE_135_BEGIN
+jnz CYCLE_135_END
+CYCLE_135_BEGIN: 
 push main_i
 call writeNumberBin
 push main_i
-push global_Ltr_138
+push global_Ltr_149
 pop bx
 pop ax
 add ax,bx
 push ax
 pop main_i
-jmp CYCLE_124
-CYCLE_124_END: 
-mov ax,global_Ltr_146
+jmp CYCLE_135
+CYCLE_135_END: 
+mov ax,global_Ltr_133
+mov random_a,ax
+mov ax,global_Ltr_97
+mov random_b,ax
+push random_a
+push random_b
+call random
+push eax
+pop main_v2
+mov ax,global_Ltr_169
 mov userFunc_b,ax
-mov ax,global_Ltr_144
+mov ax,global_Ltr_167
 mov userFunc_a,ax
 call userFunc
+push ret_userFunc
+pop main_v2
 cld
 mov ecx, lengthof main_s2
 lea edi,userProc_str

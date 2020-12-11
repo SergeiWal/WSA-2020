@@ -6,7 +6,9 @@ namespace PBN
 	{
 		for (int i = startPos; i < lt.size; ++i)
 		{
-			if (lt.table[i].lexema[0] == LEX_EQUALL || lt.table[i].lexema[0] == LEX_CALL)
+			if (lt.table[i].lexema[0] == LEX_EQUALL && lt.table[i + 1].lexema[0] == LEX_CALL)
+				return i + 2;
+			else if (lt.table[i].lexema[0] == LEX_EQUALL || lt.table[i].lexema[0] == LEX_CALL)
 				return i + 1;
 			else if(lt.table[i].lexema[0] == LEX_OPERATION)
 				for (; ; i--) 
@@ -44,12 +46,13 @@ namespace PBN
 					expression->result[expression->size++] = *it_in_table;
 
 					if (lex.idtable.table[it_in_table->idxTI].idtype == IT::IDTYPE::F ||
-						lex.idtable.table[it_in_table->idxTI].idtype == IT::IDTYPE::P)
+						lex.idtable.table[it_in_table->idxTI].idtype == IT::IDTYPE::P
+						|| lex.idtable.table[it_in_table->idxTI].idtype == IT::IDTYPE::E)
 					{
 						idtype = lex.idtable.table[it_in_table->idxTI].idtype;
 						seqLen = 0;
 					}
-					else if (idtype == IT::IDTYPE::F || idtype == IT::IDTYPE::P)seqLen++;
+					else if (idtype == IT::IDTYPE::F || idtype == IT::IDTYPE::P || idtype == IT::IDTYPE::E)seqLen++;
 				}
 			}
 			else if (opr == LEX_LEFTHESIS)stack.push(it_in_table);
@@ -63,7 +66,7 @@ namespace PBN
 				}
 				if (!stack.empty())stack.pop();
 
-				if (idtype == IT::IDTYPE::F || idtype == IT::IDTYPE::P)
+				if (idtype == IT::IDTYPE::F || idtype == IT::IDTYPE::P || idtype == IT::IDTYPE::E)
 				{
 					LT::Entry* specEntry = new LT::Entry;
 					IT::Entry* countParam = new IT::Entry;

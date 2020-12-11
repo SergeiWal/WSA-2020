@@ -9,13 +9,15 @@ namespace GRB
 	Greibach greibach(NS('S'), TS('&'),
 		6,
 		Rule(NS('S'), GRB_ERROR_SERIES + 0,
-			6,
+			8,
 			Rule::Chain(4, TS('m'), TS('{'), NS('N'), TS('}')),
 			Rule::Chain(5, TS('m'), TS('{'), NS('N'), TS('}'), NS('S')),
 			Rule::Chain(13, TS('f'), TS('t'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}'), NS('S')),
 			Rule::Chain(12, TS('f'), TS('t'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS('r'), NS('E'), TS(';'), TS('}')),
 			Rule::Chain(8, TS('p'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS('}')),
-			Rule::Chain(9, TS('p'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS('}'), NS('S'))
+			Rule::Chain(9, TS('p'), TS('i'), TS('('), NS('F'), TS(')'), TS('{'), NS('N'), TS('}'), NS('S')),
+			Rule::Chain(7, TS('e'),  TS('t'), TS('i'), TS('('), NS('F'), TS(')'), TS(';')),
+			Rule::Chain(8, TS('e'), TS('t'), TS('i'), TS('('), NS('F'), TS(')'), TS(';'), NS('S'))
 		),
 		Rule(NS('N'), GRB_ERROR_SERIES + 1,
 			12,

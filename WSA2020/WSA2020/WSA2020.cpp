@@ -24,15 +24,16 @@ int _tmain(int argc, _TCHAR* argv[])
 		LEX::TableFill(in, lex);
 		LEX::LexTableOut(lex.lextable, lex.idtable);
 		LEX::IdTableOut(lex.idtable);
-		/*MFST_TRACE_START
+		MFST_TRACE_START
 			MFST::Mfst mfst(lex, GRB::getGreibach());
 		mfst.start();
 		mfst.savededucation();
-		mfst.printrules();*/
+		mfst.printrules();
 		PBN::BuildCodeInPN(lex);
 		LEX::LexTableOut(lex.lextable, lex.idtable);
 		LEX::IdTableOut(lex.idtable);
 		std::ofstream* file = CG::CreateAsmFile();
+		CG::ExtrnFuncAdd(file, lex.idtable, lex.lextable);
 		CG::ConstBlockFill(file, lex.idtable);
 		CG::DataBLockFILL(file, lex.idtable);
 		CG::CodeBlockFILL(file, lex.idtable, lex.lextable);

@@ -63,9 +63,10 @@ namespace LEX
 
 		IT::IDDATATYPE currentIdDataType = IT::IDDATATYPE::NONE;
 		IT::IDTYPE currentIdType = IT::IDTYPE::NONE;
-		bool isCycle = false;
 
+		bool isCycle = false;
 		bool isMain = false;
+		bool isExtr = false;
 
 		for (int i = 0; i<in.text.size(); ++i)
 		{
@@ -76,7 +77,7 @@ namespace LEX
 			if (in.text[i].value.size() == 1 && lex.one_symbol_lexems.find(in.text[i].value[0]) != lex.one_symbol_lexems.end())
 			{
 				if (in.text[i].value[0] == LEX_CALL)currentIdType = IT::IDTYPE::C;
-				ExitFromVisibleRegion(visibleRegions, in.text[i].value[0],isCycle);
+				ExitFromVisibleRegion(visibleRegions, in.text[i].value[0], isCycle, isExtr);
 				SetNewLtNodeValue(*ltNewEntry, in.text[i].value[0]);
 			}
 			else
@@ -85,6 +86,7 @@ namespace LEX
 				switch (lextype)
 				{
 				case LexType::E:
+					isExtr = true;
 					currentIdType = IT::IDTYPE::E;
 					SetNewLtNodeValue(*ltNewEntry, LEX_EXTR);
 					break;
@@ -106,7 +108,7 @@ namespace LEX
 					{
 						if (itNewEntry->idtype == IT::IDTYPE::NONE)
 							throw ERROR_THROW_IN(125, in.text[i].line, in.text[i].begin);
-						if (itNewEntry->iddatatype == IT::IDDATATYPE::NONE && itNewEntry->idtype != IT::IDTYPE::P)
+						if (itNewEntry->iddatatype == IT::IDDATATYPE::NONE && itNewEntry->idtype != IT::IDTYPE::P && itNewEntry->idtype != IT::IDTYPE::E)
 							throw ERROR_THROW_IN(126, in.text[i].line, in.text[i].begin);
 
 						SetDefaultValue(*itNewEntry);
@@ -115,8 +117,9 @@ namespace LEX
 						IT::Add(lex.idtable, *itNewEntry);
 					} 
 					
-					if (itNewEntry->idtype == IT::IDTYPE::F || itNewEntry->idtype == IT::IDTYPE::P)
-						visibleRegions.push(itNewEntry->id);
+					if (itNewEntry->idtype == IT::IDTYPE::F || itNewEntry->idtype == IT::IDTYPE::P ||
+						itNewEntry->idtype == IT::IDTYPE::E)
+								visibleRegions.push(itNewEntry->id);
 
 					currentIdDataType = IT::IDDATATYPE::NONE;
 					currentIdType = IT::IDTYPE::NONE;
@@ -198,10 +201,15 @@ namespace LEX
 			ent.idtype = IT::IDTYPE::A;
 	}
 
-	void ExitFromVisibleRegion(std::stack<std::string>& regions, char currentCh, bool isCycle)
+	void ExitFromVisibleRegion(std::stack<std::string>& regions, char currentCh, bool& isCycle, bool& isExtr)
 	{
 		if (currentCh == LEX_BRACELET && !isCycle)regions.pop();
 		else if (currentCh == LEX_BRACELET && isCycle)isCycle = false;
+		else if (currentCh == LEX_SEMICOLON && isExtr)
+		{
+			regions.pop();
+			isExtr = false;
+		}
 	}
 
 	void SetNewLtNodeValue(LT::Entry& entry, char value)
@@ -433,6 +441,9 @@ namespace LEX
 
 				switch (it.table[i].idtype)
 				{
+				case IT::IDTYPE::E:
+					out << "extern function" << "\t\t";
+					break;
 				case IT::IDTYPE::F:
 					out << "function name" << "\t\t";
 					break;

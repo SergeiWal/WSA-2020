@@ -23,7 +23,7 @@ extern "C"
 		return buf;
 	}
 
-	void writeNumberBin(short number)
+	bool writeNumberBin(short number)
 	{
 		if (number < 0)std::cout << "1b" ;
 		else std::cout << "0b" ;
@@ -40,9 +40,11 @@ extern "C"
 		for (; len >= 0; --len)std::cout << dest[len];
 		
 		std::cout << std::endl;
+
+		return true;
 	}
 
-	void writeNumberOct(short number)
+	bool writeNumberOct(short number)
 	{
 		if (number < 0)std::cout << "1o";
 		else std::cout << "0o";
@@ -59,19 +61,21 @@ extern "C"
 		for (; len >= 0; --len)std::cout << dest[len];
 
 		std::cout << std::endl;
+		return true;
 	}
 	
 
-	void  writeStr(short l, char* str)
+	bool  writeStr(short l, char* str)
 	{
 		std::cout << str << std::endl;
-
+		return true;
 	}
 
-	void writeBool(int b)
+	bool writeBool(int b)
 	{
 		if (b < 1)std::cout << "false";
 		else std::cout << "true";
+		return true;
 	}
 		
 }

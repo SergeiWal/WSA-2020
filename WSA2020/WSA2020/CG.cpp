@@ -8,13 +8,28 @@ namespace CG
 		stream->open(FILENAME);
 		if (!stream->is_open())throw ERROR_THROW(124);
 		*stream << PROC_SERIES << ENDL << MODEL << ENDL << LIBRARY
-			<< ENDL << EXIT_PROC << ENDL << STLIB_FUNC << ENDL << STACK << ENDL;
+			<< ENDL << EXIT_PROC << ENDL << STLIB_FUNC << ENDL;
+
 		return stream;
 	}
 
+
+	void ExtrnFuncAdd(std::ofstream* file, IT::IdTable it, LT::LexTable lt)
+	{
+		for (int i = 0;i<lt.size && lt.table[i].lexema[0] != LEX_MAIN;++i)
+		{
+			if (lt.table[i].lexema[0] == LEX_EXTR)
+			{
+				i += 2;
+				*file << "EXTRN " << it.table[lt.table[i].idxTI].id << " :proc" << ENDL;
+			}
+		}
+	}
+
+
 	void ConstBlockFill(std::ofstream* file, IT::IdTable it)
 	{
-		*file << CONST << ENDL;
+		*file << STACK << ENDL << CONST << ENDL;
 		for (int i = 0; i < it.size; ++i)
 		{
 			if (it.table[i].idtype == IT::IDTYPE::L && it.table[i].id != NULL)
@@ -196,6 +211,7 @@ namespace CG
 		bool isReturn = false;
 		bool isExpr = false;
 		bool isBinary = true;
+		bool isExtrn = false;
 		int resultBufferIdx = -1;		//индекс переменной назначения, если -1 то не активен
 		int parameterCount;				//кол-во параметров вызова функции
 		int idxBuf;						//буфер индекса
@@ -247,6 +263,7 @@ namespace CG
 				break;
 			case LEX_CALL:
 				idxBuf = ++i;
+				if (it.table[lt.table[idxBuf].idxTI].idtype == IT::IDTYPE::E)isExtrn = true;
 				while (lt.table[i].lexema[0] != SEQ)i++;
 				parameterCount = it.table[lt.table[i].idxTI].value.vint;
 				//проверка на колво
@@ -272,8 +289,44 @@ namespace CG
 							<< '_' << it.table[lt.table[i].idxTI].id << ENDL << "rep movsb" << ENDL;
 					}
 				}
+				if (isExtrn)
+				{
+					for (auto c : parametrs[it.table[lt.table[idxBuf].idxTI].id])
+					{
+						if (c.type != IT::IDDATATYPE::STR)
+						{
+							*file << "push " << c.name << ENDL;
+						}
+						else
+						{
+							*file << "push offset " << c.name << ENDL
+								<< "push lengthof" << c.name << ENDL;
+						}
+					}
+				}
 				--i;
 				*file << "call " << it.table[lt.table[i].idxTI].id << ENDL;
+				if (it.table[lt.table[i].idxTI].idtype == IT::IDTYPE::E && (resultBufferIdx != -1 || isExpr || isWrite))
+				{
+					switch (it.table[lt.table[i].idxTI].iddatatype)
+					{
+					case IT::IDDATATYPE::BL:
+						currentType = IT::IDDATATYPE::BL;
+						*file << "push eax" << ENDL;
+						break;
+					case IT::IDDATATYPE::INT:
+						currentType = IT::IDDATATYPE::INT;
+						*file << "push eax" << ENDL;
+						break;
+					case IT::IDDATATYPE::STR:
+						currentType = IT::IDDATATYPE::STR;
+						*file << "push offset eax" << ENDL << "push lengthof eax" << ENDL;
+						break;
+					default:
+						break;
+					}
+				}
+
 				if (it.table[lt.table[i].idxTI].idtype == IT::IDTYPE::F && (resultBufferIdx!=-1 || isExpr || isWrite))
 				{
 					switch (it.table[lt.table[i].idxTI].iddatatype)
@@ -296,12 +349,23 @@ namespace CG
 					}
 				}
 				i += parameterCount + 1;
+				isExtrn = false;
 				break;
 			case LEX_OPERATION:
 				isExpr = true;
 				if (lt.table[i - 2].lexema[0] == LEX_EQUALL)isBinary = false;
 				generationOperation(file, it.table[lt.table[i].idxTI].id[0], currentType, i, isBinary);
 				isBinary = true;
+				break;
+			case LEX_EXTR:
+				i+=2;
+				funcName = it.table[lt.table[i].idxTI].id;
+				while (lt.table[i].lexema[0] != LEX_RIGHTHESIS)
+				{
+					++i;
+					if (lt.table[i].lexema[0] == LEX_ID)
+						parametrs[funcName].push_back(Parametr(funcName + '_' + it.table[lt.table[i].idxTI].id, it.table[lt.table[i].idxTI].iddatatype));
+				}
 				break;
 			case LEX_FUNCTION:
 				i++;

@@ -153,7 +153,7 @@
 						FST::RELATION('N', 2),FST::RELATION('O', 2),FST::RELATION('P', 2),FST::RELATION('Q', 2),FST::RELATION('R', 2), FST::RELATION('S', 2),FST::RELATION('T', 2),FST::RELATION('U', 2),FST::RELATION('V', 2),FST::RELATION('W', 2),FST::RELATION('X', 2),FST::RELATION('Y', 2),FST::RELATION('Z', 2),\
 						FST::RELATION('0', 2),FST::RELATION('1', 2),FST::RELATION('2', 2),FST::RELATION('3', 2),FST::RELATION('4', 2),FST::RELATION('5', 2),FST::RELATION('6', 2),FST::RELATION('7', 2),FST::RELATION('8', 2),FST::RELATION('9', 2)),\
 						FST::NODE()
-#define EXTRN			6,\
+#define EXTRN			5,\
 						FST::NODE(1, FST::RELATION('e', 1)),\
 						FST::NODE(1, FST::RELATION('x', 2)),\
 						FST::NODE(1, FST::RELATION('t', 3)),\
@@ -203,7 +203,7 @@ namespace LEX
 	void SetNewLtNodeValue(LT::Entry& entry, char value);
 	IT::IDDATATYPE GetDataType(std::vector<unsigned char> word);
 	void IsParametrSet(IT::Entry& ent, char nextCh);
-	void ExitFromVisibleRegion(std::stack<std::string>& regions, char currentCh, bool isCycle);
+	void ExitFromVisibleRegion(std::stack<std::string>& regions, char currentCh, bool& isCycle, bool& isExtr);
 	void SetDefaultValue(IT::Entry& ent);
 	void SetLiteralValue(IT::Entry& ent, const std::vector<unsigned char>& word);
 	void SetLiteralName(IT::Entry& ent, int number);

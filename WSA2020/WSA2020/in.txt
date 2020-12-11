@@ -5,12 +5,14 @@ func short userFunc(short a, short b)
 	ret c;
 }
 
+extr short  random(short a, short b);
+
 proc userProc(string str)
 {
 	write str;
 }
 
-extr random(short a, short b);
+
 
 main
 {
@@ -40,8 +42,9 @@ main
 		write i;
 		i = i + 0b1;	
 	}
-	
-	$userFunc(0b11, 0b101);
+
+	v2 = $random(0b100,0b0);
+	v2 = $userFunc(0b11, 0b101);
 
 	$userProc(s2);
 	write s1;

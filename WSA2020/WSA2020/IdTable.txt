@@ -1,32 +1,35 @@
 	NAME	DATATYPE	VALUE	TYPE			REFERENCE	VISIBILITY
-000	userFunc	short	0	function name		142		global
+000	userFunc	short	0	function name		165		global
 001	a	short	0	parameter		18		userFunc
 002	b	short	0	parameter		19		userFunc
 003	c	short	0	variable name		17		userFunc
-004	+	void	none	138		
-005	*	void	none	112		
-006	userProc	void	none	procedure name		150		global
-007	str	string	''	parameter		31		userProc
-008	s1	string	''	variable name		42		main
-009	s2	string	''	variable name		151		main
-010	v1	short	0	variable name		109		main
-011	v2	short	0	variable name		110		main
-012	b1	bool	false	variable name		94		main
-013	b2	bool	false	variable name		62		main
-014	buf	string	''	variable name		66		main
-015	TCHAR	short	0	variable name		70		main
-016	Ltr_74	string	'Привет, Мир!!!!'	literal		74		global
-017	Ltr_78	string	'Hello, World!!!'	literal		78		global
-018	Ltr_82	short	12	literal		82		global
-019	Ltr_86	short	4	literal		86		global
-020	Ltr_90	bool	false	literal		90		global
-021	Ltr_98	short	-3	literal		98		global
-022	v3	short	0	variable name		126		main
-023	/	void	none	111		
-024	i	short	0	variable name		136		main
-025	Ltr_122	short	0	literal		122		global
-026	<	void	none	127		
-027	Ltr_138	short	1	literal		152		global
-028	Ltr_144	short	3	literal		143		global
-029	Ltr_146	short	5	literal		144		global
-030	Ltr_142	short	2	literal		145		global
+004	+	void	none	149		
+005	*	void	none	123		
+006	random	short	0	extern function		155		global
+007	a	short	0	parameter		32		random
+008	b	short	0	parameter		35		random
+009	userProc	void	none	procedure name		173		global
+010	str	string	''	parameter		42		userProc
+011	s1	string	''	variable name		53		main
+012	s2	string	''	variable name		174		main
+013	v1	short	0	variable name		120		main
+014	v2	short	0	variable name		121		main
+015	b1	bool	false	variable name		105		main
+016	b2	bool	false	variable name		73		main
+017	buf	string	''	variable name		77		main
+018	TCHAR	short	0	variable name		81		main
+019	Ltr_85	string	'Привет, Мир!!!!'	literal		85		global
+020	Ltr_89	string	'Hello, World!!!'	literal		89		global
+021	Ltr_93	short	12	literal		93		global
+022	Ltr_97	short	4	literal		156		global
+023	Ltr_101	bool	false	literal		101		global
+024	Ltr_109	short	-3	literal		109		global
+025	v3	short	0	variable name		137		main
+026	/	void	none	122		
+027	i	short	0	variable name		147		main
+028	Ltr_133	short	0	literal		157		global
+029	<	void	none	138		
+030	Ltr_149	short	1	literal		175		global
+031	Ltr_167	short	3	literal		166		global
+032	Ltr_169	short	5	literal		167		global
+033	Ltr_155	short	2	literal		168		global
