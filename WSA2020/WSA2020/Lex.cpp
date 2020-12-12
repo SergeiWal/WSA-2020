@@ -321,6 +321,10 @@ namespace LEX
 			ent.id[0] = '/';
 			ent.id[1] = STR_END;
 			break;
+		case '%':
+			ent.id[0] = '%';
+			ent.id[1] = STR_END;
+			break;
 		case '<':
 			ent.id[0] = '<';
 			ent.id[1] = STR_END;

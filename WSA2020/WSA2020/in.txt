@@ -6,6 +6,7 @@ func short userFunc(short a, short b)
 }
 
 extr short  random(short a, short b);
+extr short len(string s);
 
 proc userProc(string str)
 {
@@ -43,8 +44,17 @@ main
 		i = i + 0b1;	
 	}
 
-	v2 = $random(0b100,0b0);
+	v3 = $len(s1);
+	write 'Длина строки';
+	write v3;
+
+	var string s3;
+	s3 = s1 + s2;
+	write s3;
+
+	v2 = $random(0b100,0b0) + 0b10;
 	v2 = $userFunc(0b11, 0b101);
+	write b1;
 
 	$userProc(s2);
 	write s1;

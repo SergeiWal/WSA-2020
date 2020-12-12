@@ -119,7 +119,8 @@ namespace CG
 		case '+':
 			if (type == IT::IDDATATYPE::INT)*file << "pop bx" << ENDL << "pop ax" << ENDL
 				<< "add ax,bx" << ENDL << "push ax" << ENDL;
-			else if (type == IT::IDDATATYPE::STR)*file << "call concat" << ENDL;
+			else if (type == IT::IDDATATYPE::STR)*file << "call concat" << ENDL
+				<< "push eax" << ENDL << "push 256" << ENDL;
 			break;
 		case '-':
 			if (isBinary)*file << "pop bx" << ENDL << "pop ax" << ENDL
@@ -300,7 +301,7 @@ namespace CG
 						else
 						{
 							*file << "push offset " << c.name << ENDL
-								<< "push lengthof" << c.name << ENDL;
+								<< "push lengthof " << c.name << ENDL;
 						}
 					}
 				}

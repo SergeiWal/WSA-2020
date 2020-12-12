@@ -14,7 +14,7 @@ namespace PBN
 		LT::Entry result[LT_MAXSIZE];
 		int size;
 		std::map<char, int>  operators = { {'(', 0 }, {')',0} ,{',', 1} , {'>', 2}, {'<', 2},
-			{'!', 2}, {'=', 2},{'+', 2}, {'-', 2}, {'*', 3}, {'/', 3} };
+			{'!', 2}, {'=', 2},{'+', 2}, {'-', 2}, {'*', 3}, {'/', 3}, {'%', 3} };
 	};
 
 	int SearchExpressionPos(int startPos, const LT::LexTable& lt);
