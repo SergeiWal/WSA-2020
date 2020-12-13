@@ -20,7 +20,7 @@
 
 namespace IT
 {
-	enum class IDDATATYPE { INT = 1, STR = 2, BL = 3, NONE = 4 };
+	enum class IDDATATYPE { INT = 1, STR = 2, BL = 3, CHR = 4, NONE = 5 };
 	enum class IDTYPE { V = 1, F = 2, P = 3, A = 4, L = 5, C = 6, O =7, E =8, NONE = 9 };
 	//v- переменная;f-функция;p-процедура;a-параметр функции\процедуры;
 	//l- литерал;c - вызов функции\процедуры;none-неопределённое значение;e - подключение внешней функции
@@ -42,6 +42,7 @@ namespace IT
 
 			} vstr;
 			bool vbool;
+			char vchar;
 		}value;
 		Entry() {};
 		Entry(IDTYPE nidtype, IDDATATYPE niddatatype, std::string vReg, std::vector<unsigned char> nid);

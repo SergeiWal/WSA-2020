@@ -11,7 +11,7 @@
 
 #define SEQ '@'
 
-#define TOKENS_ARRAY_SIZE 16
+#define TOKENS_ARRAY_SIZE 18
 
 #define STRING			7,\
 						FST::NODE(1, FST::RELATION('s', 1)),\
@@ -34,6 +34,12 @@
 						FST::NODE(1, FST::RELATION('o', 3)),\
 						FST::NODE(1, FST::RELATION('l', 4)),\
 						FST::NODE()
+#define CHAR            5,\
+						FST::NODE(1, FST::RELATION('c', 1)),\
+						FST::NODE(1, FST::RELATION('h', 2)),\
+						FST::NODE(1, FST::RELATION('a', 3)),\
+						FST::NODE(1, FST::RELATION('r', 4)),\
+						FST::NODE()
 #define NUMB_LITERAL	5,\
 						FST::NODE(2, FST::RELATION('0', 1), FST::RELATION('1', 1)),\
 						FST::NODE(2, FST::RELATION('b', 2), FST::RELATION('o', 3)),\
@@ -44,7 +50,7 @@
 						FST::RELATION('4', 4), FST::RELATION('5', 4), FST::RELATION('6', 4), FST::RELATION('7', 4)),\
 						FST::NODE()
 #define STR_LITERAL		3,\
-						FST::NODE(1, FST::RELATION('\'', 1)),\
+						FST::NODE(1, FST::RELATION('\"', 1)),\
 						FST::NODE(142, FST::RELATION('a', 1),FST::RELATION('b', 1),FST::RELATION('c', 1),FST::RELATION('d', 1),\
 						FST::RELATION('e', 1),FST::RELATION('f', 1), FST::RELATION('g', 1),FST::RELATION('h', 1), FST::RELATION('i', 1), FST::RELATION('j', 1),FST::RELATION('k', 1),FST::RELATION('l', 1),FST::RELATION('m', 1),\
 						FST::RELATION('n', 1),FST::RELATION('o', 1),FST::RELATION('p', 1),FST::RELATION('q', 1),FST::RELATION('r', 1), FST::RELATION('s', 1),FST::RELATION('t', 1),FST::RELATION('u', 1),FST::RELATION('v', 1),FST::RELATION('w', 1),FST::RELATION('x', 1),FST::RELATION('y', 1),FST::RELATION('z', 1),\
@@ -63,7 +69,7 @@
 						FST::RELATION('!', 1), FST::RELATION('?', 1), FST::RELATION('+', 1), FST::RELATION('-', 1),\
 						FST::RELATION('/', 1), FST::RELATION('*', 1), FST::RELATION('(', 1), FST::RELATION(')', 1), FST::RELATION('0', 1), \
 						FST::RELATION('1', 1), FST::RELATION('2', 1), FST::RELATION('3', 1), FST::RELATION('4', 1), FST::RELATION('5', 1), \
-						FST::RELATION('6', 1), FST::RELATION('7', 1), FST::RELATION('8', 1), FST::RELATION('9', 1),FST::RELATION(' ', 1), FST::RELATION('\'', 2)),\
+						FST::RELATION('6', 1), FST::RELATION('7', 1), FST::RELATION('8', 1), FST::RELATION('9', 1),FST::RELATION(' ', 1), FST::RELATION('\"', 2)),\
 						FST::NODE()
 #define BOOL_LITERAL	8,\
 						FST::NODE(2, FST::RELATION('t', 1),FST::RELATION('f', 3)),\
@@ -74,6 +80,29 @@
 						FST::NODE(1, FST::RELATION('s', 6)),\
 						FST::NODE(1, FST::RELATION('e', 7)),\
 						FST::NODE()
+#define CHAR_LITERAL	4,\
+						FST::NODE(1, FST::RELATION('\'', 1)),\
+						FST::NODE(141, FST::RELATION('a', 2),FST::RELATION('b', 2),FST::RELATION('c', 2),FST::RELATION('d', 2),\
+						FST::RELATION('e', 2),FST::RELATION('f', 2), FST::RELATION('g', 2),FST::RELATION('h', 2), FST::RELATION('i', 2), FST::RELATION('j', 2),FST::RELATION('k', 2),FST::RELATION('l', 2),FST::RELATION('m', 2),\
+						FST::RELATION('n', 2),FST::RELATION('o', 2),FST::RELATION('p', 2),FST::RELATION('q', 2),FST::RELATION('r', 2), FST::RELATION('s', 2),FST::RELATION('t', 2),FST::RELATION('u', 2),FST::RELATION('v', 2),FST::RELATION('w', 2),FST::RELATION('x', 2),FST::RELATION('y', 2),FST::RELATION('z', 2),\
+						FST::RELATION('A', 2), FST::RELATION('B', 2), FST::RELATION('C', 2), FST::RELATION('D', 2), \
+						FST::RELATION('E', 2), FST::RELATION('F', 2), FST::RELATION('G', 2), FST::RELATION('H', 2), FST::RELATION('I', 2), FST::RELATION('J', 2), FST::RELATION('K', 2), FST::RELATION('L', 2), FST::RELATION('M', 2), \
+						FST::RELATION('N', 2), FST::RELATION('O', 2), FST::RELATION('P', 2), FST::RELATION('Q', 2), FST::RELATION('R', 2), FST::RELATION('S', 2), FST::RELATION('T', 2), FST::RELATION('U', 2), FST::RELATION('V', 2), FST::RELATION('W', 2), FST::RELATION('X', 2), FST::RELATION('Y', 2), FST::RELATION('Z', 2),\
+						FST::RELATION('à', 2), FST::RELATION('á', 2), FST::RELATION('â', 2), FST::RELATION('ã', 2),\
+						FST::RELATION('ä', 2), FST::RELATION('å', 2), FST::RELATION('¸', 2), FST::RELATION('æ', 2), FST::RELATION('ç', 2), FST::RELATION('è', 2), FST::RELATION('é', 2), FST::RELATION('ê', 2), FST::RELATION('ë', 2), \
+						FST::RELATION('ì', 2), FST::RELATION('í', 2), FST::RELATION('î', 2), FST::RELATION('ï', 2), FST::RELATION('ð', 2), FST::RELATION('ñ', 2), FST::RELATION('ò', 2), FST::RELATION('ó', 2), FST::RELATION('ô', 2), FST::RELATION('õ', 2), FST::RELATION('ö', 2), FST::RELATION('÷', 2), FST::RELATION('ø', 2), \
+						FST::RELATION('ù', 2), FST::RELATION('Ú', 2), FST::RELATION('û', 2), FST::RELATION('ü', 2), FST::RELATION('ý', 2), FST::RELATION('þ', 2), FST::RELATION('ÿ', 2),\
+						FST::RELATION('À', 2), FST::RELATION('Á', 2), FST::RELATION('Â', 2), FST::RELATION('Ã', 2), \
+						FST::RELATION('Ä', 2), FST::RELATION('Å', 2), FST::RELATION('¨', 2), FST::RELATION('Æ', 2), FST::RELATION('Ç', 2), FST::RELATION('È', 2), FST::RELATION('É', 2), FST::RELATION('Ê', 2), FST::RELATION('Ë', 2), \
+						FST::RELATION('Ì', 2), FST::RELATION('Í', 2), FST::RELATION('Î', 2), FST::RELATION('Ï', 2), FST::RELATION('Ð', 2), FST::RELATION('Ñ', 2), FST::RELATION('Ò', 2), FST::RELATION('Ó', 2), FST::RELATION('Ô', 2), FST::RELATION('Õ', 2), FST::RELATION('Ö', 2), FST::RELATION('×', 2), FST::RELATION('Ø', 2), \
+						FST::RELATION('Ù', 2), FST::RELATION('Ú', 2), FST::RELATION('Û', 2), FST::RELATION('Ü', 2), FST::RELATION('Ý', 2), FST::RELATION('Þ', 2), FST::RELATION('ß', 2),\
+						FST::RELATION(',', 2), FST::RELATION('.', 2), FST::RELATION(':', 2), FST::RELATION(';', 2),\
+						FST::RELATION('!', 2), FST::RELATION('?', 2), FST::RELATION('+', 2), FST::RELATION('-', 2),\
+						FST::RELATION('/', 2), FST::RELATION('*', 2), FST::RELATION('(', 2), FST::RELATION(')', 2), FST::RELATION('0', 2), \
+						FST::RELATION('2', 2), FST::RELATION('2', 2), FST::RELATION('3', 2), FST::RELATION('4', 2), FST::RELATION('5', 2), \
+						FST::RELATION('6', 2), FST::RELATION('7', 2), FST::RELATION('8', 2), FST::RELATION('9', 2),FST::RELATION(' ', 2)),\
+						FST::NODE(1, FST::RELATION('\'', 3)),\
+						FST::NODE() 
 #define VAR				4,\
 						FST::NODE(1, FST::RELATION('v', 1)),\
 						FST::NODE(1, FST::RELATION('a', 2)),\
@@ -160,15 +189,16 @@
 						FST::NODE(1, FST::RELATION('r', 4)),\
 						FST::NODE()
 
-#define TOKENS_ARRAY  {\
-					  LexExample('s',FST::FST(SHORT),LexType::T),LexExample('s',FST::FST(STRING),LexType::T),\
-					  LexExample('b',FST::FST(BOOL),LexType::T),LexExample('0',FST::FST(NUMB_LITERAL),LexType::L),\
-					  LexExample('1',FST::FST(NUMB_LITERAL),LexType::L), LexExample('\'',FST::FST(STR_LITERAL),LexType::L),\
-					  LexExample('t',FST::FST(BOOL_LITERAL),LexType::L), LexExample('f',FST::FST(BOOL_LITERAL),LexType::L),\
-					  LexExample('v',FST::FST(VAR),LexType::V), LexExample('m',FST::FST(MAIN),LexType::M),\
-					  LexExample('f',FST::FST(FUNC),LexType::F), LexExample('p',FST::FST(PROC),LexType::P),\
-					  LexExample('r',FST::FST(RET),LexType::R), LexExample('w',FST::FST(CYCLE),LexType::C), \
-					  LexExample('w',FST::FST(WRITE),LexType::W),  LexExample('e',FST::FST(EXTRN),LexType::E)} 
+#define TOKENS_ARRAY	{\
+						LexExample('s',FST::FST(SHORT),LexType::T),LexExample('s',FST::FST(STRING),LexType::T),\
+						LexExample('b',FST::FST(BOOL),LexType::T),LexExample('0',FST::FST(NUMB_LITERAL),LexType::L),\
+						LexExample('1',FST::FST(NUMB_LITERAL),LexType::L), LexExample('\"',FST::FST(STR_LITERAL),LexType::L),\
+						LexExample('t',FST::FST(BOOL_LITERAL),LexType::L), LexExample('f',FST::FST(BOOL_LITERAL),LexType::L),\
+						LexExample('c',FST::FST(CHAR),LexType::T), LexExample('\'',FST::FST(CHAR_LITERAL),LexType::L),\
+						LexExample('v',FST::FST(VAR),LexType::V), LexExample('m',FST::FST(MAIN),LexType::M),\
+						LexExample('f',FST::FST(FUNC),LexType::F), LexExample('p',FST::FST(PROC),LexType::P),\
+						LexExample('r',FST::FST(RET),LexType::R), LexExample('w',FST::FST(CYCLE),LexType::C), \
+						LexExample('w',FST::FST(WRITE),LexType::W),  LexExample('e',FST::FST(EXTRN),LexType::E)} 
 
 				
 namespace LEX
@@ -205,7 +235,7 @@ namespace LEX
 	void IsParametrSet(IT::Entry& ent, char nextCh);
 	void ExitFromVisibleRegion(std::stack<std::string>& regions, char currentCh, bool& isCycle, bool& isExtr);
 	void SetDefaultValue(IT::Entry& ent);
-	void SetLiteralValue(IT::Entry& ent, const std::vector<unsigned char>& word);
+	void SetLiteralValue(IT::Entry& ent, const In::word& word);
 	void SetLiteralName(IT::Entry& ent, int number);
 	void SetOperatorValue(IT::Entry& ent, char ch);
 

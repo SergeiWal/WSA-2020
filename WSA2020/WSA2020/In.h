@@ -11,7 +11,7 @@
 /* 0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  A  |  B  |  C  |  D  |  E  |  F  |    */\
  IN::F,IN::F,IN::F,IN::F,IN::F,IN::F,IN::F,IN::F,IN::F,IN::I,IN::E,IN::F,IN::F,IN::F,IN::F,IN::F, /*0*/\
  IN::F,IN::F,IN::F,IN::F,IN::F,IN::F,IN::F,IN::F,IN::F,IN::F,IN::F,IN::F,IN::F,IN::F,IN::F,IN::F, /*1*/\
- IN::I,IN::S,IN::F,IN::S,IN::S,IN::S,IN::F,IN::K,IN::S,IN::S,IN::S,IN::S,IN::S,IN::S,IN::F,IN::S, /*2*/\
+ IN::I,IN::S,IN::K,IN::S,IN::S,IN::S,IN::F,IN::K,IN::S,IN::S,IN::S,IN::S,IN::S,IN::S,IN::F,IN::S, /*2*/\
  IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::F,IN::S,IN::S,IN::S,IN::S,IN::D, /*3*/\
  IN::F,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D, /*4*/\
  IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::D,IN::F,IN::F,IN::F,IN::F,IN::F, /*5*/\

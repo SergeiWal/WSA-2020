@@ -18,29 +18,31 @@ EXTRN len :proc
 EXTRN writeOct :proc
 .stack 4096
 .const
-global_Ltr_101 byte "Привет, Мир!!!!",0
+global_Ltr_60 sword 3
 
-global_Ltr_105 byte "Hello, World!!!",0
+global_Ltr_71 
 
-global_Ltr_109 sword 12
+global_Ltr_107 byte "Привет, Мир!!!!",0
 
-global_Ltr_113 sword 4
+global_Ltr_111 byte "Hello, World!!!",0
 
-global_Ltr_117 word 0
+global_Ltr_115 sword 12
 
-global_Ltr_125 sword -3
+global_Ltr_119 sword 4
 
-global_Ltr_149 sword 0
+global_Ltr_123 word 0
 
-global_Ltr_165 sword 1
+global_Ltr_131 sword -3
 
-global_Ltr_177 byte "Длина строки",0
+global_Ltr_155 sword 0
 
-global_Ltr_216 sword 2
+global_Ltr_171 sword 1
 
-global_Ltr_223 sword 3
+global_Ltr_183 byte "Длина строки",0
 
-global_Ltr_225 sword 5
+global_Ltr_222 sword 2
+
+global_Ltr_231 sword 5
 
 .data
 ;-------------------userFunc return value -----------------
@@ -59,8 +61,8 @@ random_b sword 0
 len_s   byte 255 dup ("0"), 0
 ;-------------------writeOct parameters data -----------------
 writeOct_n sword 0
-;-------------------userProc parameters data -----------------
-userProc_str   byte 255 dup ("0"), 0
+;------variable-------------ch--------------variable--------
+main_ch 
 ;------variable-------------s1--------------variable--------
 main_s1   byte 255 dup ("0"), 0
 ;------variable-------------s2--------------variable--------
@@ -111,9 +113,8 @@ userProc PROC uses eax ebx ecx edi esi
 push ebp
  mov ebp, esp
 
-push offset userProc_str
-push lengthof userProc_str
-call writeStr
+push global_Ltr_60
+call writeNumberBin
 mov esp, ebp
  pop ebp
 ret
@@ -125,29 +126,31 @@ push ebp
 push 1251
  call SetConsoleOutputCP
 
-push offset global_Ltr_101
-push lengthof global_Ltr_101
+push global_Ltr_71
+pop main_ch
+push offset global_Ltr_107
+push lengthof global_Ltr_107
 cld
 pop ecx
 pop esi
 lea edi, main_s1
 rep movsb
-push offset global_Ltr_105
-push lengthof global_Ltr_105
+push offset global_Ltr_111
+push lengthof global_Ltr_111
 cld
 pop ecx
 pop esi
 lea edi, main_s2
 rep movsb
-push global_Ltr_109
+push global_Ltr_115
 pop main_v1
-push global_Ltr_113
+push global_Ltr_119
 pop main_v2
-push global_Ltr_117
+push global_Ltr_123
 pop main_b1
 push main_b1
 pop main_b2
-push global_Ltr_125
+push global_Ltr_131
 pop main_TCHAR
 push main_v1
 push main_v2
@@ -167,36 +170,36 @@ pop ax
 imul bx
 push ax
 pop main_v3
-push global_Ltr_149
+push global_Ltr_155
 pop main_i
-CYCLE_151: 
+CYCLE_157: 
 push main_i
 push main_v3
 pop bx
 pop ax
 cmp ax,bx
-js true_154
+js true_160
 push 0
-jmp end_154
-true_154: 
+jmp end_160
+true_160: 
 	 push 1
-end_154: 
+end_160: 
 pop eax
 cmp eax,1
-jz CYCLE_151_BEGIN
-jnz CYCLE_151_END
-CYCLE_151_BEGIN: 
+jz CYCLE_157_BEGIN
+jnz CYCLE_157_END
+CYCLE_157_BEGIN: 
 push main_i
 call writeNumberBin
 push main_i
-push global_Ltr_165
+push global_Ltr_171
 pop bx
 pop ax
 add ax,bx
 push ax
 pop main_i
-jmp CYCLE_151
-CYCLE_151_END: 
+jmp CYCLE_157
+CYCLE_157_END: 
 cld
 mov ecx, lengthof main_s1
 lea edi,len_s
@@ -207,16 +210,16 @@ push lengthof len_s
 call len
 push eax
 pop main_v3
-push offset global_Ltr_177
-push lengthof global_Ltr_177
+push offset global_Ltr_183
+push lengthof global_Ltr_183
 call writeStr
 push main_v3
 call writeNumberBin
-mov ax,global_Ltr_113
+mov ax,global_Ltr_119
 mov writeOct_n,ax
 push writeOct_n
 call writeOct
-CYCLE_192: 
+CYCLE_198: 
 push offset main_s1
 push lengthof main_s1
 push offset main_s2
@@ -224,17 +227,17 @@ push lengthof main_s2
 call stringEquel
 push eax
 cmp eax,0
-jz true_195
+jz true_201
 push 0
-jmp end_195
-true_195: 
+jmp end_201
+true_201: 
 	 push 1
-end_195: 
+end_201: 
 pop eax
 cmp eax,1
-jz CYCLE_192_BEGIN
-jnz CYCLE_192_END
-CYCLE_192_BEGIN: 
+jz CYCLE_198_BEGIN
+jnz CYCLE_198_END
+CYCLE_198_BEGIN: 
 push offset main_s1
 push lengthof main_s1
 push offset main_s2
@@ -247,36 +250,31 @@ pop ecx
 pop esi
 lea edi, main_s1
 rep movsb
-jmp CYCLE_192
-CYCLE_192_END: 
-mov ax,global_Ltr_149
+jmp CYCLE_198
+CYCLE_198_END: 
+mov ax,global_Ltr_155
 mov random_a,ax
-mov ax,global_Ltr_113
+mov ax,global_Ltr_119
 mov random_b,ax
 push random_a
 push random_b
 call random
 push eax
-push global_Ltr_216
+push global_Ltr_222
 pop bx
 pop ax
 add ax,bx
 push ax
 pop main_v2
-mov ax,global_Ltr_225
+mov ax,global_Ltr_231
 mov userFunc_b,ax
-mov ax,global_Ltr_223
+mov ax,global_Ltr_60
 mov userFunc_a,ax
 call userFunc
 push ret_userFunc
 pop main_v2
 push main_b1
 call writeBool
-cld
-mov ecx, lengthof main_s2
-lea edi,userProc_str
-lea esi,main_s2
-rep movsb
 call userProc
 push offset main_s1
 push lengthof main_s1

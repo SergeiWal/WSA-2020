@@ -4,6 +4,7 @@
 #include "Lex.h"
 #include  "MFST.h"
 #include "PBN.h"
+#include "Semantics.h"
 #include "CG.h"
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -32,6 +33,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		PBN::BuildCodeInPN(lex);
 		LEX::LexTableOut(lex.lextable, lex.idtable);
 		LEX::IdTableOut(lex.idtable);
+		SA::SemanticsAnaliz(lex.idtable, lex.lextable);
 		std::ofstream* file = CG::CreateAsmFile();
 		CG::ExtrnFuncAdd(file, lex.idtable, lex.lextable);
 		CG::ConstBlockFill(file, lex.idtable);

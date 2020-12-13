@@ -264,13 +264,13 @@ namespace CG
 				while (lt.table[i].lexema[0] != SEQ)i++;
 				parameterCount = it.table[lt.table[i].idxTI].value.vint;
 				//проверка на колво
-				if (parameterCount != parametrs[it.table[lt.table[idxBuf].idxTI].id].size())throw ERROR_THROW_IN(132, lt.table[idxBuf].sn, 0);
+				if (parameterCount != parametrs[it.table[lt.table[idxBuf].idxTI].id].size())throw ERROR_THROW_IN(301, lt.table[idxBuf].sn, 0);
 				for (int j = parameterCount, k =0; j > 0; --j, k++)
 				{ 
 					--i;
 					//проверка на совпадение типов
 					if (it.table[lt.table[i].idxTI].iddatatype != parametrs[it.table[lt.table[idxBuf].idxTI].id][k].type)
-						throw ERROR_THROW_IN(133, lt.table[idxBuf].sn, 0);
+						throw ERROR_THROW_IN(300, lt.table[idxBuf].sn, 0);
 					if (it.table[lt.table[i].idxTI].iddatatype != IT::IDDATATYPE::STR)
 					{
 						*file << "mov ax," << it.table[lt.table[i].idxTI].visibilityRegion

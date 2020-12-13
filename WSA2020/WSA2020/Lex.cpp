@@ -103,6 +103,8 @@ namespace LEX
 					ltNewEntry->idxTI = IT::IsId(lex.idtable, *itNewEntry);
 					if (itNewEntry->idtype == IT::IDTYPE::V && ltNewEntry->idxTI != TI_NULLIDX)
 						throw ERROR_THROW_IN(127, in.text[i].line, in.text[i].begin);
+					if (itNewEntry->idtype == IT::IDTYPE::V && itNewEntry->visibilityRegion == GLOBAL_VISIBLE)
+						throw ERROR_THROW_IN(309, in.text[i].line, in.text[i].begin);
 
 					if (ltNewEntry->idxTI == TI_NULLIDX) 
 					{
@@ -128,7 +130,7 @@ namespace LEX
 					SetNewLtNodeValue(*ltNewEntry, LEX_LITERAL);
 					currentIdType = IT::IDTYPE::L;
 					itNewEntry = new IT::Entry;
-					SetLiteralValue(*itNewEntry, in.text[i].value);
+					SetLiteralValue(*itNewEntry, in.text[i]);
 					ltNewEntry->idxTI = IT::IsId(lex.idtable, *itNewEntry);
 					if (ltNewEntry->idxTI == TI_NULLIDX)
 					{
@@ -229,6 +231,9 @@ namespace LEX
 		case 'b':
 			return IT::IDDATATYPE::BL;
 			break;
+		case 'c':
+			return IT::IDDATATYPE::CHR;
+			break;
 		default:
 			return IT::IDDATATYPE::NONE;
 			break;
@@ -249,48 +254,61 @@ namespace LEX
 			ent.value.vstr.len = 0;
 			ent.value.vstr.str[0] = STR_END;
 			break;
+		case IT::IDDATATYPE::CHR:
+			ent.value.vchar = '\0';
+			break;
 		default:
 			break;
 		}
 	}
 
-	void SetLiteralValue(IT::Entry& ent, const std::vector<unsigned char>& word)
+	void SetLiteralValue(IT::Entry& ent, const In::word& word)
 	{
 		ent.idtype = IT::IDTYPE::L;
 		ent.visibilityRegion = "global";
-		if (word[0] == '\'')
+		if (word.value[0] == '\"')
 		{
 			int size = 0;
 			int i = 1;
-			while (word[i] != '\'')
+			while (word.value[i] != '\"')
 			{
-				ent.value.vstr.str[size] = word[i];
+				ent.value.vstr.str[size] = word.value[i];
 				i++;
 				size++;
 			}
+			if (size > TI_STR_MAXSIZE)throw ERROR_THROW_IN(130, word.line, word.begin);
 			ent.value.vstr.len = size;
 			ent.value.vstr.str[size] = STR_END;
 			ent.iddatatype = IT::IDDATATYPE::STR;
 		}
-		else if (word[0] == 't')
+		else if (word.value[0] == '\'')
+		{
+			ent.iddatatype = IT::IDDATATYPE::CHR;
+			ent.value.vchar = word.value[1];
+		}
+		else if (word.value[0] == 't')
 		{
 			ent.iddatatype = IT::IDDATATYPE::BL;
 			ent.value.vbool = true;
 		}
-		else if (word[0] == 'f')
+		else if (word.value[0] == 'f')
 		{
 			ent.iddatatype = IT::IDDATATYPE::BL;
 			ent.value.vbool = false;
 		}
-		else if (word[1] == SIGN_BIN_NUMBER)
+		else if (word.value[1] == SIGN_BIN_NUMBER)
 		{
 			ent.iddatatype = IT::IDDATATYPE::INT;
-			ent.value.vint = BinToInt(word);
+			ent.value.vint = BinToInt(word.value);
+			if (ent.value.vint > TI_SHORT_MAXSIZE)throw ERROR_THROW_IN(128, word.line, word.begin);
+			if (ent.value.vint < TI_SHORT_NEG_MAXSIZE)throw ERROR_THROW_IN(129, word.line, word.begin);
 		}
-		else if (word[1] == SIGN_OCT_NUMBER)
+		else if (word.value[1] == SIGN_OCT_NUMBER)
 		{
 			ent.iddatatype = IT::IDDATATYPE::INT;
-			ent.value.vint = OctToInt(word);
+			ent.value.vint = OctToInt(word.value);
+			if (ent.value.vint > TI_SHORT_MAXSIZE)throw ERROR_THROW_IN(128, word.line, word.begin);
+			if (ent.value.vint < TI_SHORT_NEG_MAXSIZE)throw ERROR_THROW_IN(129, word.line, word.begin);
 		}
 		
 	}

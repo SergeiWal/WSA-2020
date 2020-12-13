@@ -1,15 +1,34 @@
-﻿Сборка начата 13.12.2020 14:24:44.
+﻿Сборка начата 14.12.2020 1:04:38.
 Уровень детализации журнала: Normal.     1>Проект "D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\WSA2020.vcxproj" в узле 2 (целевые объекты Build).
      1>InitializeBuildStatus:
          Создание "Debug\WSA2020.tlog\unsuccessfulbuild", так как было задано "AlwaysCreate".
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\bin\HostX86\x86\CL.exe /c /ZI /JMC /nologo /W3 /WX- /diagnostics:column /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /permissive- /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc142.pdb" /Gd /TP /analyze- /FC /errorReport:prompt Lex.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\bin\HostX86\x86\CL.exe /c /ZI /JMC /nologo /W3 /WX- /diagnostics:column /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /permissive- /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc142.pdb" /Gd /TP /analyze- /FC /errorReport:prompt CG.cpp IT.cpp Lex.cpp MFST.cpp PBN.cpp Semantics.cpp WSA2020.cpp
+         CG.cpp
+     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\CG.h(28,1): warning C4005: SHORT: изменение макроопределения
+       D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.h(30): message : см. предыдущее определение "SHORT"
+     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\CG.h(32,1): warning C4005: RET: изменение макроопределения
+       D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.h(133): message : см. предыдущее определение "RET"
+         IT.cpp
+     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\IT.cpp(11,21): warning C4018: <: несоответствие типов со знаком и без знака
          Lex.cpp
      1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(51,21): warning C4018: <: несоответствие типов со знаком и без знака
      1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(71,20): warning C4018: <: несоответствие типов со знаком и без знака
-     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(358,44): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
-     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(374,45): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
-     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(236): warning C4715: LEX::GetDataType: значение возвращается не при всех путях выполнения
+     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(376,44): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
+     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(392,45): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
+         MFST.cpp
+     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\MFST.cpp(266,68): warning C4267: =: преобразование из "size_t" в "short"; возможна потеря данных
+         PBN.cpp
+     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\PBN.cpp(34,15): warning C4305: инициализация: усечение из "int" в "char"
+     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\PBN.cpp(34,15): warning C4309: инициализация: усечение константного значения
+         Semantics.cpp
+         WSA2020.cpp
+     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\CG.h(28,1): warning C4005: SHORT: изменение макроопределения
+       D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.h(30): message : см. предыдущее определение "SHORT"
+     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\CG.h(32,1): warning C4005: RET: изменение макроопределения
+       D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.h(133): message : см. предыдущее определение "RET"
+         Создание кода...
+     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(241): warning C4715: LEX::GetDataType: значение возвращается не при всех путях выполнения
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\bin\HostX86\x86\link.exe /ERRORREPORT:PROMPT /OUT:"D:\GIT\WSA-2020_course_project\WSA2020\Debug\WSA2020.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG:FASTLINK /PDB:"D:\GIT\WSA-2020_course_project\WSA2020\Debug\WSA2020.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\GIT\WSA-2020_course_project\WSA2020\Debug\WSA2020.lib" /MACHINE:X86 Debug\CG.obj
          Debug\Error.obj
@@ -23,6 +42,7 @@
          Debug\MFST.obj
          Debug\Parm.obj
          Debug\PBN.obj
+         Debug\Semantics.obj
          Debug\WSA2020.obj
          WSA2020.vcxproj -> D:\GIT\WSA-2020_course_project\WSA2020\Debug\WSA2020.exe
        FinalizeBuildStatus:
@@ -34,13 +54,21 @@
 
        "D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\WSA2020.vcxproj" (целевой объект Build ) (1) ->
        (Целевой объект ClCompile) -> 
+         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\CG.h(28,1): warning C4005: SHORT: изменение макроопределения
+         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\CG.h(32,1): warning C4005: RET: изменение макроопределения
+         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\IT.cpp(11,21): warning C4018: <: несоответствие типов со знаком и без знака
          D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(51,21): warning C4018: <: несоответствие типов со знаком и без знака
          D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(71,20): warning C4018: <: несоответствие типов со знаком и без знака
-         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(358,44): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
-         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(374,45): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
-         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(236): warning C4715: LEX::GetDataType: значение возвращается не при всех путях выполнения
+         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(376,44): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
+         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(392,45): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
+         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\MFST.cpp(266,68): warning C4267: =: преобразование из "size_t" в "short"; возможна потеря данных
+         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\PBN.cpp(34,15): warning C4305: инициализация: усечение из "int" в "char"
+         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\PBN.cpp(34,15): warning C4309: инициализация: усечение константного значения
+         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\CG.h(28,1): warning C4005: SHORT: изменение макроопределения
+         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\CG.h(32,1): warning C4005: RET: изменение макроопределения
+         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020\Lex.cpp(241): warning C4715: LEX::GetDataType: значение возвращается не при всех путях выполнения
 
-    Предупреждений: 5
+    Предупреждений: 13
     Ошибок: 0
 
-Прошло времени 00:00:02.54
+Прошло времени 00:00:07.65

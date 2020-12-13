@@ -7,17 +7,17 @@ func short userFunc(short a, short b)
 
 extr short  random(short a, short b);
 extr short len(string s);
-extr short writeOct(short n);
+extr bool writeOct(short n);
 
-proc userProc(string str)
+proc userProc()
 {
-	write str;
+	write 0b11;
 }
-
-
 
 main
 {
+	var char ch;
+	ch = 'a';
 	var string s1; 
 	var string s2;
 	var short v1 ;
@@ -26,8 +26,8 @@ main
 	var bool b2 ;
 	var string buf ;
 	var short TCHAR ;
-	s1 = 'Привет, Мир!!!!';
-	s2 = 'Hello, World!!!';
+	s1 = "Привет, Мир!!!!";
+	s2 = "Hello, World!!!";
 	v1 = 0b1100;
 	v2 = 0b100;
 	b1 = false;
@@ -46,7 +46,7 @@ main
 	}
 
 	v3 = $len(s1);
-	write 'Длина строки';
+	write "Длина строки";
 	write v3;
 	$writeOct(0b100);
 	var string s3;
@@ -59,7 +59,7 @@ main
 	v2 = $userFunc(0b11, 0b101);
 	write b1;
 
-	$userProc(s2);
+	$userProc();
 	write s1;
 }
 

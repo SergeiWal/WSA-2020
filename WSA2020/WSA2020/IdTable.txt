@@ -1,42 +1,43 @@
 	NAME	DATATYPE	VALUE	TYPE			REFERENCE	VISIBILITY
-000	userFunc	short	0	function name		221		global
+000	userFunc	short	0	function name		227		global
 001	a	short	0	parameter		18		userFunc
 002	b	short	0	parameter		19		userFunc
 003	c	short	0	variable name		17		userFunc
-004	+	void	none	214		
-005	*	void	none	139		
-006	random	short	0	extern function		209		global
+004	+	void	none	220		
+005	*	void	none	145		
+006	random	short	0	extern function		215		global
 007	a	short	0	parameter		32		random
 008	b	short	0	parameter		35		random
-009	len	short	0	extern function		171		global
+009	len	short	0	extern function		177		global
 010	s	string	''	parameter		43		len
-011	writeOct	short	0	extern function		183		global
+011	writeOct	bool	false	extern function		189		global
 012	n	short	0	parameter		51		writeOct
-013	userProc	void	none	procedure name		232		global
-014	str	string	''	parameter		58		userProc
-015	s1	string	''	variable name		201		main
-016	s2	string	''	variable name		233		main
-017	v1	short	0	variable name		136		main
-018	v2	short	0	variable name		137		main
-019	b1	bool	false	variable name		121		main
-020	b2	bool	false	variable name		89		main
-021	buf	string	''	variable name		93		main
-022	TCHAR	short	0	variable name		97		main
-023	Ltr_101	string	'Привет, Мир!!!!'	literal		101		global
-024	Ltr_105	string	'Hello, World!!!'	literal		105		global
-025	Ltr_109	short	12	literal		109		global
-026	Ltr_113	short	4	literal		210		global
-027	Ltr_117	bool	false	literal		117		global
-028	Ltr_125	short	-3	literal		125		global
-029	v3	short	0	variable name		153		main
-030	/	void	none	138		
-031	i	short	0	variable name		163		main
-032	Ltr_149	short	0	literal		211		global
-033	<	void	none	154		
-034	Ltr_165	short	1	literal		234		global
-035	Ltr_177	string	'Длина строки'	literal		177		global
-036	s3	string	''	variable name		190		main
-037	==	void	none	195		
-038	Ltr_216	short	2	literal		224		global
-039	Ltr_223	short	3	literal		222		global
-040	Ltr_225	short	5	literal		223		global
+013	userProc	void	none	procedure name		238		global
+014	Ltr_60	short	3	literal		228		global
+015	ch	void	none	variable name		67		main
+016	Ltr_71	void	none	literal		71		global
+017	s1	string	''	variable name		207		main
+018	s2	string	''	variable name		208		main
+019	v1	short	0	variable name		142		main
+020	v2	short	0	variable name		143		main
+021	b1	bool	false	variable name		127		main
+022	b2	bool	false	variable name		95		main
+023	buf	string	''	variable name		99		main
+024	TCHAR	short	0	variable name		103		main
+025	Ltr_107	string	'Привет, Мир!!!!'	literal		107		global
+026	Ltr_111	string	'Hello, World!!!'	literal		111		global
+027	Ltr_115	short	12	literal		115		global
+028	Ltr_119	short	4	literal		216		global
+029	Ltr_123	bool	false	literal		123		global
+030	Ltr_131	short	-3	literal		131		global
+031	v3	short	0	variable name		159		main
+032	/	void	none	144		
+033	i	short	0	variable name		169		main
+034	Ltr_155	short	0	literal		239		global
+035	<	void	none	160		
+036	Ltr_171	short	1	literal		191		global
+037	Ltr_183	string	'Длина строки'	literal		183		global
+038	s3	string	''	variable name		196		main
+039	==	void	none	201		
+040	Ltr_222	short	2	literal		230		global
+041	Ltr_231	short	5	literal		229		global

@@ -106,7 +106,7 @@ namespace Log
 		if (log.stream != NULL && log.stream->is_open())(*log.stream) << "Ошибка" <<
 			error.id << ": " << error.message << "(строка:" << error.inext.line <<
 			" позиция:" << error.inext.col <<")" << '\n';
-		std::cout << "Ошибка: " << error.id << ": " << error.message << "(строка:" << error.inext.line <<
+		std::cout << "Ошибка " << error.id << ": " << error.message << "(строка:" << error.inext.line <<
 			" позиция:" << error.inext.col << ")" << '\n';
 	}
 	void Close(LOG log)
