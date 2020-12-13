@@ -26,7 +26,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		LEX::IdTableOut(lex.idtable);
 		MFST_TRACE_START
 			MFST::Mfst mfst(lex, GRB::getGreibach());
-		mfst.start();
+		if(!mfst.start())throw ERROR_THROW_IN(606, 0, 0);
 		mfst.savededucation();
 		mfst.printrules();
 		PBN::BuildCodeInPN(lex);

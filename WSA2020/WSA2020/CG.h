@@ -17,7 +17,8 @@
 #define STLIB_FUNC  "EXTRN concat :proc\n"\
 					"EXTRN writeNumberBin :proc\n"\
 					"EXTRN writeStr :proc\n"\
-					"EXTRN writeBool :proc\n"
+					"EXTRN writeBool :proc\n"\
+					"EXTRN stringEquel :proc\n"
 #define EXIT_PROC "ExitProcess PROTO :DWORD\n"\
 				  "SetConsoleOutputCP PROTO :DWORD\n"
 #define STACK ".stack 4096"

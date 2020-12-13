@@ -9,6 +9,8 @@
 #define TI_STR_DEFAULT 0x00
 #define TI_NULLIDX 0xffffffff
 #define TI_STR_MAXSIZE 255
+#define TI_SHORT_MAXSIZE  32767
+#define TI_SHORT_NEG_MAXSIZE -32768
 #define GLOBAL_VISIBLE "global"
 #define MAIN_VISIBLE "main"
 #define CYCLE_VISIBLE(i) "while" + std::to_string(i)

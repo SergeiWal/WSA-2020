@@ -142,9 +142,8 @@ namespace CG
 				<< "idiv bx" << ENDL << "push dx" << ENDL;
 			break;
 		case '<':
-			if (type == IT::IDDATATYPE::STR)*file << "pop ebx" << ENDL << "pop eax" << ENDL
-				<< "move eax, lengtof eax" << ENDL << "mov ebx, lengtof ebx" << ENDL
-				<< "cmp eax,ebx" << ENDL << "js " << "true_" << number << ENDL
+			if (type == IT::IDDATATYPE::STR)*file << "call stringEquel" << ENDL
+				<< "push eax" << ENDL << "cmp eax,1" << ENDL << "jnz " << "true_" << number << ENDL
 				<< "push 0" << ENDL << "jmp " << "end_" << number << ENDL
 				<< "true_" << number << ": " << ENDL << "\t push 1" << ENDL
 				<< "end_" << number << ": " << ENDL;
@@ -155,9 +154,8 @@ namespace CG
 				<< "end_" << number << ": " << ENDL;
 			break;
 		case '>':
-			if (type == IT::IDDATATYPE::STR)*file << "pop ebx" << ENDL << "pop eax" << ENDL
-				<< "move eax, lengtof eax" << ENDL << "mov ebx, lengtof ebx" << ENDL
-				<< "cmp eax,ebx" << ENDL << "jns " << "true_" << number << ENDL
+			if (type == IT::IDDATATYPE::STR)*file << "call stringEquel" << ENDL
+				<< "push eax" << ENDL << "cmp eax,1" << ENDL << "jz " << "true_" << number << ENDL
 				<< "push 0" << ENDL << "jmp " << "end_" << number << ENDL
 				<< "true_" << number << ": " << ENDL << "\t push 1" << ENDL
 				<< "end_" << number << ": " << ENDL;
@@ -168,9 +166,8 @@ namespace CG
 				<< "end_" << number << ": " << ENDL;
 			break;
 		case '=':
-			if (type == IT::IDDATATYPE::STR)*file << "pop ebx" << ENDL << "pop eax" << ENDL
-				<< "move eax, lengtof eax" << ENDL << "mov ebx, lengtof ebx" << ENDL
-				<< "cmp eax,ebx" << ENDL << "jz " << "true_" << number << ENDL
+			if (type == IT::IDDATATYPE::STR)*file << "call stringEquel" << ENDL
+				<< "push eax" << ENDL << "cmp eax,0" << ENDL << "jz " << "true_" << number << ENDL
 				<< "push 0" << ENDL << "jmp " << "end_" << number << ENDL
 				<< "true_" << number << ": " << ENDL << "\t push 1" << ENDL
 				<< "end_" << number << ": " << ENDL;
@@ -181,9 +178,8 @@ namespace CG
 				<< "end_" << number << ": " << ENDL;
 			break;
 		case '!':
-			if (type == IT::IDDATATYPE::STR)*file << "pop ebx" << ENDL << "pop eax" << ENDL
-				<< "move eax, lengtof eax" << ENDL << "mov ebx, lengtof ebx" << ENDL 
-				<< "cmp eax,ebx" << ENDL << "jnz " << "true_" << number << ENDL
+			if (type == IT::IDDATATYPE::STR)*file << "call stringEquel" << ENDL
+				<< "push eax" << ENDL << "cmp eax,1" << ENDL << "jnz " << "true_" << number << ENDL
 				<< "push 0" << ENDL << "jmp " << "end_" << number << ENDL
 				<< "true_" << number << ": " << ENDL << "\t push 1" << ENDL
 				<< "end_" << number << ": " << ENDL;

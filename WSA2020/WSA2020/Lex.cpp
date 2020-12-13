@@ -144,7 +144,7 @@ namespace LEX
 					visibleRegions.push(MAIN_VISIBLE);
 					SetNewLtNodeValue(*ltNewEntry, LEX_MAIN);
 					if (!isMain)isMain = true;
-					else throw ERROR_THROW_IN(130, in.text[i].line, in.text[i].begin);
+					else throw ERROR_THROW_IN(132, in.text[i].line, in.text[i].begin);
 					break;
 				case LexType::O:
 					currentIdDataType = IT::IDDATATYPE::NONE;
@@ -191,7 +191,7 @@ namespace LEX
 			LT::Add(lex.lextable, *ltNewEntry);
 		}
 
-		if (!isMain)throw ERROR_THROW_IN(129, 0, 0);
+		if (!isMain)throw ERROR_THROW_IN(131, 0, 0);
 	}
 
 	void IsParametrSet(IT::Entry& ent, char nextCh)

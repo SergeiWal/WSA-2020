@@ -51,7 +51,7 @@ extern "C"
 		return true;
 	}
 
-	bool writeNumberOct(short number)
+	bool writeOct(short number)
 	{
 		if (number < 0)std::cout << "1o";
 		else std::cout << "0o";
@@ -83,6 +83,16 @@ extern "C"
 		if (b < 1)std::cout << "false\n";
 		else std::cout << "true\n";
 		return true;
+	}
+
+	short stringEquel(short l1, char* str1, short l2, char* str2)
+	{
+		int len1 = len(256, str1);
+		int len2 = len(256, str2);
+
+		if (len1 == len2) return 0;
+		else if (len1 < len2) return -1;
+		else if (len1 > len2)return 1;
 	}
 		
 }

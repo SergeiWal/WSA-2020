@@ -1,4 +1,4 @@
-﻿Сборка начата 12.12.2020 14:41:22.
+﻿Сборка начата 13.12.2020 12:00:09.
 Уровень детализации журнала: Normal.     1>Проект "D:\GIT\WSA-2020_course_project\WSA2020\WSA2020Lib\WSA2020Lib.vcxproj" в узле 2 (целевые объекты Build).
      1>InitializeBuildStatus:
          Создание "Debug\WSA2020Lib.tlog\unsuccessfulbuild", так как было задано "AlwaysCreate".
@@ -7,6 +7,7 @@
      1>cl : командная строка warning D9025: переопределение "/sdl" на "/GS-"
          WSA2020Lib.cpp
      1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020Lib\WSA2020Lib.cpp(30): warning C4172: возвращение адреса локальной или временной переменной : buf
+     1>D:\GIT\WSA-2020_course_project\WSA2020\WSA2020Lib\WSA2020Lib.cpp(96): warning C4715: stringEquel: значение возвращается не при всех путях выполнения
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.28.29333\bin\HostX86\x86\Lib.exe /OUT:"D:\GIT\WSA-2020_course_project\WSA2020\Debug\WSA2020Lib.lib" /NOLOGO /MACHINE:X86 /SUBSYSTEM:CONSOLE Debug\WSA2020Lib.obj
          WSA2020Lib.vcxproj -> D:\GIT\WSA-2020_course_project\WSA2020\Debug\WSA2020Lib.lib
@@ -23,8 +24,9 @@
        (Целевой объект ClCompile) -> 
          cl : командная строка warning D9025: переопределение "/sdl" на "/GS-"
          D:\GIT\WSA-2020_course_project\WSA2020\WSA2020Lib\WSA2020Lib.cpp(30): warning C4172: возвращение адреса локальной или временной переменной : buf
+         D:\GIT\WSA-2020_course_project\WSA2020\WSA2020Lib\WSA2020Lib.cpp(96): warning C4715: stringEquel: значение возвращается не при всех путях выполнения
 
-    Предупреждений: 2
+    Предупреждений: 3
     Ошибок: 0
 
-Прошло времени 00:00:00.94
+Прошло времени 00:00:01.58
