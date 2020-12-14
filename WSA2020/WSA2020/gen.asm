@@ -20,29 +20,29 @@ EXTRN writeOct :proc
 .const
 global_Ltr_60 sword 3
 
-global_Ltr_71 
+global_Ltr_71 byte "a",0
 
-global_Ltr_107 byte "Привет, Мир!!!!",0
+global_Ltr_110 byte "Привет, Мир!!!!",0
 
-global_Ltr_111 byte "Hello, World!!!",0
+global_Ltr_114 byte "Hello, World!!!",0
 
-global_Ltr_115 sword 12
+global_Ltr_118 sword 12
 
-global_Ltr_119 sword 4
+global_Ltr_122 sword 4
 
-global_Ltr_123 word 0
+global_Ltr_126 word 0
 
-global_Ltr_131 sword -3
+global_Ltr_134 sword -3
 
-global_Ltr_155 sword 0
+global_Ltr_158 sword 0
 
-global_Ltr_171 sword 1
+global_Ltr_174 sword 1
 
-global_Ltr_183 byte "Длина строки",0
+global_Ltr_186 byte "Длина строки",0
 
-global_Ltr_222 sword 2
+global_Ltr_225 sword 2
 
-global_Ltr_231 sword 5
+global_Ltr_234 sword 5
 
 .data
 ;-------------------userFunc return value -----------------
@@ -62,7 +62,7 @@ len_s   byte 255 dup ("0"), 0
 ;-------------------writeOct parameters data -----------------
 writeOct_n sword 0
 ;------variable-------------ch--------------variable--------
-main_ch 
+main_ch  byte "0", 0
 ;------variable-------------s1--------------variable--------
 main_s1   byte 255 dup ("0"), 0
 ;------variable-------------s2--------------variable--------
@@ -126,31 +126,39 @@ push ebp
 push 1251
  call SetConsoleOutputCP
 
-push global_Ltr_71
-pop main_ch
-push offset global_Ltr_107
-push lengthof global_Ltr_107
+push offset global_Ltr_71
+push lengthof global_Ltr_71
+cld
+pop ecx
+pop esi
+lea edi, main_ch
+rep movsb
+push offset main_ch
+push lengthof main_ch
+call writeStr
+push offset global_Ltr_110
+push lengthof global_Ltr_110
 cld
 pop ecx
 pop esi
 lea edi, main_s1
 rep movsb
-push offset global_Ltr_111
-push lengthof global_Ltr_111
+push offset global_Ltr_114
+push lengthof global_Ltr_114
 cld
 pop ecx
 pop esi
 lea edi, main_s2
 rep movsb
-push global_Ltr_115
+push global_Ltr_118
 pop main_v1
-push global_Ltr_119
+push global_Ltr_122
 pop main_v2
-push global_Ltr_123
+push global_Ltr_126
 pop main_b1
 push main_b1
 pop main_b2
-push global_Ltr_131
+push global_Ltr_134
 pop main_TCHAR
 push main_v1
 push main_v2
@@ -170,36 +178,36 @@ pop ax
 imul bx
 push ax
 pop main_v3
-push global_Ltr_155
+push global_Ltr_158
 pop main_i
-CYCLE_157: 
+CYCLE_160: 
 push main_i
 push main_v3
 pop bx
 pop ax
 cmp ax,bx
-js true_160
+js true_163
 push 0
-jmp end_160
-true_160: 
+jmp end_163
+true_163: 
 	 push 1
-end_160: 
+end_163: 
 pop eax
 cmp eax,1
-jz CYCLE_157_BEGIN
-jnz CYCLE_157_END
-CYCLE_157_BEGIN: 
+jz CYCLE_160_BEGIN
+jnz CYCLE_160_END
+CYCLE_160_BEGIN: 
 push main_i
 call writeNumberBin
 push main_i
-push global_Ltr_171
+push global_Ltr_174
 pop bx
 pop ax
 add ax,bx
 push ax
 pop main_i
-jmp CYCLE_157
-CYCLE_157_END: 
+jmp CYCLE_160
+CYCLE_160_END: 
 cld
 mov ecx, lengthof main_s1
 lea edi,len_s
@@ -208,18 +216,18 @@ rep movsb
 push offset len_s
 push lengthof len_s
 call len
-push eax
+push ax
 pop main_v3
-push offset global_Ltr_183
-push lengthof global_Ltr_183
+push offset global_Ltr_186
+push lengthof global_Ltr_186
 call writeStr
 push main_v3
 call writeNumberBin
-mov ax,global_Ltr_119
+mov ax,global_Ltr_122
 mov writeOct_n,ax
 push writeOct_n
 call writeOct
-CYCLE_198: 
+CYCLE_201: 
 push offset main_s1
 push lengthof main_s1
 push offset main_s2
@@ -227,17 +235,17 @@ push lengthof main_s2
 call stringEquel
 push eax
 cmp eax,0
-jz true_201
+jz true_204
 push 0
-jmp end_201
-true_201: 
+jmp end_204
+true_204: 
 	 push 1
-end_201: 
+end_204: 
 pop eax
 cmp eax,1
-jz CYCLE_198_BEGIN
-jnz CYCLE_198_END
-CYCLE_198_BEGIN: 
+jz CYCLE_201_BEGIN
+jnz CYCLE_201_END
+CYCLE_201_BEGIN: 
 push offset main_s1
 push lengthof main_s1
 push offset main_s2
@@ -250,23 +258,23 @@ pop ecx
 pop esi
 lea edi, main_s1
 rep movsb
-jmp CYCLE_198
-CYCLE_198_END: 
-mov ax,global_Ltr_155
+jmp CYCLE_201
+CYCLE_201_END: 
+mov ax,global_Ltr_158
 mov random_a,ax
-mov ax,global_Ltr_119
+mov ax,global_Ltr_122
 mov random_b,ax
 push random_a
 push random_b
 call random
-push eax
-push global_Ltr_222
+push ax
+push global_Ltr_225
 pop bx
 pop ax
 add ax,bx
 push ax
 pop main_v2
-mov ax,global_Ltr_231
+mov ax,global_Ltr_234
 mov userFunc_b,ax
 mov ax,global_Ltr_60
 mov userFunc_a,ax

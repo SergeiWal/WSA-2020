@@ -18,6 +18,7 @@ main
 {
 	var char ch;
 	ch = 'a';
+	write ch;
 	var string s1; 
 	var string s2;
 	var short v1 ;

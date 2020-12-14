@@ -447,13 +447,17 @@ namespace LEX
 					break;
 				case IT::IDDATATYPE::STR:
 					out << "string" << "\t";
-					if (it.table[i].value.vstr.len == 0)out << "\'\'" << "\t";
-					else out << '\'' << it.table[i].value.vstr.str << "\'\t";
+					if (it.table[i].value.vstr.len == 0)out << "\"\"" << "\t";
+					else out << '\"' << it.table[i].value.vstr.str << "\"\t";
 					break;
 				case IT::IDDATATYPE::BL:
 					out << "bool" << "\t";
 					if (it.table[i].value.vbool)out << "true" << "\t";
 					else out << "false" << "\t";
+					break;
+				case IT::IDDATATYPE::CHR:
+					out << "short" << "\t";
+					out << '\'' << it.table[i].value.vchar << "\'" << "\t";
 					break;
 				default:
 					out << "void" << "\t";

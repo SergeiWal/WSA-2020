@@ -49,6 +49,9 @@ namespace CG
 				case IT::IDDATATYPE::STR:
 					*file << BYTE << SPACE << '\"' << it.table[i].value.vstr.str << '\"' << LEX_COMA << 0;
 					break;
+				case IT::IDDATATYPE::CHR:
+					*file << BYTE << SPACE << "\"" << it.table[i].value.vchar << "\"" << LEX_COMA << 0;
+					break;
 				default:
 					break;
 				}
@@ -72,6 +75,9 @@ namespace CG
 			break;
 		case IT::IDDATATYPE::STR:
 			*file << SPACE << SPACE << BYTE << SPACE << TI_STR_MAXSIZE  << SPACE << "dup (\"0\"), 0";//!
+			break;
+		case IT::IDDATATYPE::CHR:
+			*file << SPACE << BYTE << SPACE << "\"0\", 0";
 			break;
 		default:
 			break;
@@ -230,7 +236,7 @@ namespace CG
 					resultBufferIdx = i;
 					i++;
 				}
-				else if (currentType != IT::IDDATATYPE::STR)
+				else if (currentType != IT::IDDATATYPE::STR && currentType != IT::IDDATATYPE::CHR)
 				{
 					*file << "push " << it.table[lt.table[i].idxTI].visibilityRegion
 						<< '_' << it.table[lt.table[i].idxTI].id << ENDL;
@@ -245,7 +251,7 @@ namespace CG
 				break;
 			case LEX_LITERAL:
 				currentType = it.table[lt.table[i].idxTI].iddatatype;
-				if (currentType != IT::IDDATATYPE::STR)
+				if (currentType != IT::IDDATATYPE::STR && currentType != IT::IDDATATYPE::CHR)
 				{
 					*file << "push " << it.table[lt.table[i].idxTI].visibilityRegion
 						<< '_' << it.table[lt.table[i].idxTI].id << ENDL;
@@ -271,7 +277,7 @@ namespace CG
 					//проверка на совпадение типов
 					if (it.table[lt.table[i].idxTI].iddatatype != parametrs[it.table[lt.table[idxBuf].idxTI].id][k].type)
 						throw ERROR_THROW_IN(300, lt.table[idxBuf].sn, 0);
-					if (it.table[lt.table[i].idxTI].iddatatype != IT::IDDATATYPE::STR)
+					if (it.table[lt.table[i].idxTI].iddatatype != IT::IDDATATYPE::STR && it.table[lt.table[i].idxTI].iddatatype != IT::IDDATATYPE::CHR)
 					{
 						*file << "mov ax," << it.table[lt.table[i].idxTI].visibilityRegion
 							<< '_' << it.table[lt.table[i].idxTI].id << ENDL
@@ -290,7 +296,7 @@ namespace CG
 				{
 					for (auto c : parametrs[it.table[lt.table[idxBuf].idxTI].id])
 					{
-						if (c.type != IT::IDDATATYPE::STR)
+						if (c.type != IT::IDDATATYPE::STR && c.type != IT::IDDATATYPE::CHR)
 						{
 							*file << "push " << c.name << ENDL;
 						}
@@ -309,11 +315,15 @@ namespace CG
 					{
 					case IT::IDDATATYPE::BL:
 						currentType = IT::IDDATATYPE::BL;
-						*file << "push eax" << ENDL;
+						*file << "push ax" << ENDL;
 						break;
 					case IT::IDDATATYPE::INT:
 						currentType = IT::IDDATATYPE::INT;
-						*file << "push eax" << ENDL;
+						*file << "push ax" << ENDL;
+						break;
+					case IT::IDDATATYPE::CHR:
+						currentType = IT::IDDATATYPE::CHR;
+						*file << "push offset eax" << ENDL << "push lengthof eax" << ENDL;
 						break;
 					case IT::IDDATATYPE::STR:
 						currentType = IT::IDDATATYPE::STR;
@@ -335,6 +345,11 @@ namespace CG
 					case IT::IDDATATYPE::INT:
 						currentType = IT::IDDATATYPE::INT;
 						*file << "push " << RET << it.table[lt.table[i].idxTI].id << ENDL;
+						break;
+					case IT::IDDATATYPE::CHR:
+						currentType = IT::IDDATATYPE::CHR;
+						*file << "push offset " << RET << it.table[lt.table[i].idxTI].id << ENDL;
+						*file << "push lengthof " << RET << it.table[lt.table[i].idxTI].id << ENDL;
 						break;
 					case IT::IDDATATYPE::STR:
 						currentType = IT::IDDATATYPE::STR;
@@ -385,7 +400,7 @@ namespace CG
 			case LEX_SEMICOLON:
 				if (resultBufferIdx != -1)
 				{
-					if (currentType != IT::IDDATATYPE::STR)
+					if (currentType != IT::IDDATATYPE::STR && currentType != IT::IDDATATYPE::CHR)
 						*file << "pop " << it.table[lt.table[resultBufferIdx].idxTI].visibilityRegion
 						<< '_' << it.table[lt.table[resultBufferIdx].idxTI].id << ENDL;
 					else *file << "cld\npop ecx\npop esi\nlea edi, " << it.table[lt.table[resultBufferIdx].idxTI].visibilityRegion
@@ -395,7 +410,7 @@ namespace CG
 				}
 				else if (isReturn)
 				{
-					if (currentType != IT::IDDATATYPE::STR)
+					if (currentType != IT::IDDATATYPE::STR && currentType != IT::IDDATATYPE::CHR)
 						*file << "pop ax" << ENDL << "mov " << RET << funcName << LEX_COMA << "ax" << ENDL;
 					else *file << "cld\npop ecx\npop esi\nlea edi, " << RET << funcName << ENDL
 						<< "rep movsb" << ENDL ;
@@ -414,6 +429,9 @@ namespace CG
 						break;
 					case IT::IDDATATYPE::STR:
 						*file << "call writeStr" << ENDL ;
+						break;
+					case IT::IDDATATYPE::CHR:
+						*file << "call writeStr" << ENDL;
 						break;
 					default:
 						break;
