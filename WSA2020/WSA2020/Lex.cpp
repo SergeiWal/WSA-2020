@@ -103,6 +103,8 @@ namespace LEX
 					ltNewEntry->idxTI = IT::IsId(lex.idtable, *itNewEntry);
 					if (itNewEntry->idtype == IT::IDTYPE::V && ltNewEntry->idxTI != TI_NULLIDX)
 						throw ERROR_THROW_IN(127, in.text[i].line, in.text[i].begin);
+					if ((itNewEntry->idtype == IT::IDTYPE::F || itNewEntry->idtype == IT::IDTYPE::P) && ltNewEntry->idxTI != TI_NULLIDX)
+						throw ERROR_THROW_IN(127, in.text[i].line, in.text[i].begin);
 					if (itNewEntry->idtype == IT::IDTYPE::V && itNewEntry->visibilityRegion == GLOBAL_VISIBLE)
 						throw ERROR_THROW_IN(309, in.text[i].line, in.text[i].begin);
 

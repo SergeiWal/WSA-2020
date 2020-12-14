@@ -39,7 +39,6 @@ int _tmain(int argc, _TCHAR* argv[])
 		CG::ConstBlockFill(file, lex.idtable);
 		CG::DataBLockFILL(file, lex.idtable);
 		CG::CodeBlockFILL(file, lex.idtable, lex.lextable);
-		CG::asmMain(file);
 		CG::CloseFile(file);
 		Log::WriteIn(log, in);
 		std::cout << std::endl;

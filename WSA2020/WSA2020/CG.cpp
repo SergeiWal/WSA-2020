@@ -7,9 +7,7 @@ namespace CG
 		std::ofstream* stream = new std::ofstream;
 		stream->open(FILENAME);
 		if (!stream->is_open())throw ERROR_THROW(124);
-		*stream << PROC_SERIES << ENDL << MODEL << ENDL << LIBRARY
-			<< ENDL << EXIT_PROC << ENDL << STLIB_FUNC << ENDL;
-
+		*stream << ASM_HEADER << STLIB_FUNC << std::endl;
 		return stream;
 	}
 
@@ -20,8 +18,8 @@ namespace CG
 		{
 			if (lt.table[i].lexema[0] == LEX_EXTR)
 			{
-				i += 2;
-				*file << "EXTRN " << it.table[lt.table[i].idxTI].id << " :proc" << ENDL;
+				i += 2; 
+				*file << EXTRN_FUNC_CONNECT(it.table[lt.table[i].idxTI].id);
 			}
 		}
 	}
@@ -29,33 +27,33 @@ namespace CG
 
 	void ConstBlockFill(std::ofstream* file, IT::IdTable it)
 	{
-		*file << STACK << ENDL << CONST << ENDL;
+		*file << STACK << CONST ;
+		*file << OWERFLOW_MESSAGE << ENDL;
+		*file << ZERODIV_MESSAGE << ENDL;
 		for (int i = 0; i < it.size; ++i)
 		{
 			if (it.table[i].idtype == IT::IDTYPE::L && it.table[i].id != NULL)
 			{
-				*file << it.table[i].visibilityRegion << '_' << it.table[i].id << SPACE;
+				*file << GET_ID(it.table[i].visibilityRegion, it.table[i].id);
 				switch (it.table[i].iddatatype)
 				{
 				case IT::IDDATATYPE::BL:
-					*file << WORD << SPACE;
-					if (it.table[i].value.vbool)*file << TRUE;
-					else *file << FALSE;
+					if (it.table[i].value.vbool)*file << GET_TYPE_VALUE(WORD, TRUE);
+					else *file << GET_TYPE_VALUE(WORD, FALSE);
 					break;
 				case IT::IDDATATYPE::INT:
-					*file << SHORT << SPACE
-						<< it.table[i].value.vint;
+					*file << GET_TYPE_VALUE(SHORT, it.table[i].value.vint);
 					break;
 				case IT::IDDATATYPE::STR:
-					*file << BYTE << SPACE << '\"' << it.table[i].value.vstr.str << '\"' << LEX_COMA << 0;
+					*file << GET_TYPE_VALUE_STR(it.table[i].value.vstr.str);
 					break;
 				case IT::IDDATATYPE::CHR:
-					*file << BYTE << SPACE << "\"" << it.table[i].value.vchar << "\"" << LEX_COMA << 0;
+					*file << GET_TYPE_VALUE_STR(it.table[i].value.vchar);
 					break;
 				default:
 					break;
 				}
-				*file << ENDL << ENDL;
+				*file << std::endl << std::endl;
 			}
 		}
 	}
@@ -65,19 +63,17 @@ namespace CG
 		switch (it.table[pos].iddatatype)
 		{
 		case IT::IDDATATYPE::BL:
-			*file << WORD << SPACE;
-			if (it.table[pos].value.vbool)*file << TRUE;
-			else *file << FALSE;
+			if (it.table[pos].value.vbool)*file << GET_TYPE_VALUE(WORD, TRUE);
+			else *file << GET_TYPE_VALUE(WORD, TRUE);
 			break;
 		case IT::IDDATATYPE::INT:
-			*file << SHORT << SPACE
-				<< it.table[pos].value.vint;
+			*file << GET_TYPE_VALUE(SHORT, it.table[pos].value.vint);
 			break;
 		case IT::IDDATATYPE::STR:
-			*file << SPACE << SPACE << BYTE << SPACE << TI_STR_MAXSIZE  << SPACE << "dup (\"0\"), 0";//!
+			*file << DEFAULT_STR_INIT;//!
 			break;
 		case IT::IDDATATYPE::CHR:
-			*file << SPACE << BYTE << SPACE << "\"0\", 0";
+			*file << DEFAULT_CHAR_INIT;
 			break;
 		default:
 			break;
@@ -94,23 +90,22 @@ namespace CG
 			case IT::IDTYPE::V:
 
 				*file << ";------variable-------------" << it.table[i].id << "--------------variable--------" << ENDL;
-				*file << it.table[i].visibilityRegion << '_' << it.table[i].id << SPACE;
+				*file << GET_ID(it.table[i].visibilityRegion, it.table[i].id);
 				SetDataValue(file, it, i);
-				*file << ENDL;
+				*file << std::endl;
 				break;
 			case IT::IDTYPE::F:
 				*file << ";-------------------" << it.table[i].id << " return value -----------------" << ENDL;
-				*file << RET << it.table[i].id << SPACE;
+				*file << GET_RET_VARIABLE(it.table[i].id);
 				SetDataValue(file, it, i);
-				*file << ENDL;
+				*file << std::endl;
 				break;
 			case IT::IDTYPE::A:
 				*file << ";-------------------" << it.table[i].visibilityRegion << " parameters data -----------------" << ENDL;
 				if (it.table[i].visibilityRegion == MAIN_VISIBLE)*file << it.table[i].id << SPACE;
-				else *file <<
-					it.table[i].visibilityRegion << '_' << it.table[i].id << SPACE;
+				else *file << GET_ID(it.table[i].visibilityRegion, it.table[i].id);
 				SetDataValue(file, it, i);
-				*file << ENDL;
+				*file << std::endl;
 				break;
 			default:
 				break;
@@ -123,78 +118,37 @@ namespace CG
 		switch (opr)
 		{
 		case '+':
-			if (type == IT::IDDATATYPE::INT)*file << "pop bx" << ENDL << "pop ax" << ENDL
-				<< "add ax,bx" << ENDL << "push ax" << ENDL;
-			else if (type == IT::IDDATATYPE::STR)*file << "call concat" << ENDL
-				<< "push eax" << ENDL << "push 256" << ENDL;
+			if (type == IT::IDDATATYPE::INT)*file << EXPR_INT_PLUS;
+			else if (type == IT::IDDATATYPE::STR)*file << EXPR_STR_CONCAT;
 			break;
 		case '-':
-			if (isBinary)*file << "pop bx" << ENDL << "pop ax" << ENDL
-				<< "sub ax,bx" << ENDL << "push ax" << ENDL;
-			else *file << "pop ax" << ENDL << "neg ax" << ENDL;
+			if (isBinary)*file << EXPR_INT_DIFF;
+			else *file << EXPR_INT_NEG;
 			break;
 		case '*':
-			*file << "pop bx" << ENDL << "pop ax" << ENDL
-				<< "imul bx" << ENDL << "push ax" << ENDL;
+			*file << EXPR_MUL;
 			break;
 		case '/':
-			*file << "pop bx" << ENDL << "pop ax" << ENDL
-				<< "mov dx,0" << ENDL
-				<< "idiv bx" << ENDL << "push ax" << ENDL;
+			*file << EXPR_DIV;
 			break;
 		case '%':
-			*file << "pop bx" << ENDL << "pop ax" << ENDL
-				<< "mov dx,0" << ENDL
-				<< "idiv bx" << ENDL << "push dx" << ENDL;
+			*file << EXPR_MOD;
 			break;
 		case '<':
-			if (type == IT::IDDATATYPE::STR)*file << "call stringEquel" << ENDL
-				<< "push eax" << ENDL << "cmp eax,1" << ENDL << "jnz " << "true_" << number << ENDL
-				<< "push 0" << ENDL << "jmp " << "end_" << number << ENDL
-				<< "true_" << number << ": " << ENDL << "\t push 1" << ENDL
-				<< "end_" << number << ": " << ENDL;
-			else *file << "pop bx" << ENDL << "pop ax" << ENDL
-				<< "cmp ax,bx" << ENDL << "js " << "true_" << number << ENDL
-				<< "push 0" << ENDL << "jmp " << "end_" << number << ENDL
-				<< "true_" << number << ": " << ENDL << "\t push 1" << ENDL
-				<< "end_" << number << ": " << ENDL;
+			if (type == IT::IDDATATYPE::STR)*file << EXPR_STR_LESS(number);
+			else *file << EXPR_INT_LESS(number);
 			break;
 		case '>':
-			if (type == IT::IDDATATYPE::STR)*file << "call stringEquel" << ENDL
-				<< "push eax" << ENDL << "cmp eax,1" << ENDL << "jz " << "true_" << number << ENDL
-				<< "push 0" << ENDL << "jmp " << "end_" << number << ENDL
-				<< "true_" << number << ": " << ENDL << "\t push 1" << ENDL
-				<< "end_" << number << ": " << ENDL;
-			else *file << "pop bx" << ENDL << "pop ax" << ENDL
-				<< "cmp ax,bx" << ENDL << "jns " << "true_" << number << ENDL
-				<< "push 0" << ENDL << "jmp " << "end_" << number << ENDL
-				<< "true_" << number << ": " << ENDL << "\t push 1" << ENDL
-				<< "end_" << number << ": " << ENDL;
+			if (type == IT::IDDATATYPE::STR)*file << EXPR_STR_MORE(number);
+			else *file << EXPR_INT_MORE(number);
 			break;
 		case '=':
-			if (type == IT::IDDATATYPE::STR)*file << "call stringEquel" << ENDL
-				<< "push eax" << ENDL << "cmp eax,0" << ENDL << "jz " << "true_" << number << ENDL
-				<< "push 0" << ENDL << "jmp " << "end_" << number << ENDL
-				<< "true_" << number << ": " << ENDL << "\t push 1" << ENDL
-				<< "end_" << number << ": " << ENDL;
-			else *file << "pop bx" << ENDL << "pop ax" << ENDL
-				<< "cmp eax,ebx" << ENDL << "jz " << "true_" << number << ENDL
-				<< "push 0" << ENDL << "jmp " << "end_" << number << ENDL
-				<< "true_" << number << ": " << ENDL << "\t push 1" << ENDL
-				<< "end_" << number << ": " << ENDL;
+			if (type == IT::IDDATATYPE::STR)*file << EXPR_STR_EQUEL(number);
+			else *file << EXPR_INT_EQUEL(number);
 			break;
 		case '!':
-			if (type == IT::IDDATATYPE::STR)*file << "call stringEquel" << ENDL
-				<< "push eax" << ENDL << "cmp eax,1" << ENDL << "jnz " << "true_" << number << ENDL
-				<< "push 0" << ENDL << "jmp " << "end_" << number << ENDL
-				<< "true_" << number << ": " << ENDL << "\t push 1" << ENDL
-				<< "end_" << number << ": " << ENDL;
-			else *file << "pop bx" << ENDL << "pop ax" << ENDL
-				<< "cmp ax,bx" << ENDL << "jnz " << "true_" << number << ENDL
-				<< "push 0" << ENDL << "jmp " << "end_" << number << ENDL
-				<< "true_" << number << ": " << ENDL << "\t push 1" << ENDL
-				<< "end_" << number << ": " << ENDL;
-			break;
+			if (type == IT::IDDATATYPE::STR)*file << EXPR_STR_NOT_EQUEL(number);
+			else *file << EXPR_INT_NOT_EQUEL(number);
 		default:
 			break;
 		}
@@ -237,74 +191,42 @@ namespace CG
 					i++;
 				}
 				else if (currentType != IT::IDDATATYPE::STR && currentType != IT::IDDATATYPE::CHR)
-				{
-					*file << "push " << it.table[lt.table[i].idxTI].visibilityRegion
-						<< '_' << it.table[lt.table[i].idxTI].id << ENDL;
-				}
+					*file << PUSH(it.table[lt.table[i].idxTI].visibilityRegion, it.table[lt.table[i].idxTI].id) << std::endl;
 				else
-				{
-					*file << "push offset " << it.table[lt.table[i].idxTI].visibilityRegion
-						<< '_' << it.table[lt.table[i].idxTI].id << ENDL
-						<< "push lengthof " <<  it.table[lt.table[i].idxTI].visibilityRegion
-						<< '_' << it.table[lt.table[i].idxTI].id << ENDL;
-				}
+					*file << PUSH_STR(it.table[lt.table[i].idxTI].visibilityRegion, it.table[lt.table[i].idxTI].id) << std::endl;
 				break;
 			case LEX_LITERAL:
 				currentType = it.table[lt.table[i].idxTI].iddatatype;
 				if (currentType != IT::IDDATATYPE::STR && currentType != IT::IDDATATYPE::CHR)
-				{
-					*file << "push " << it.table[lt.table[i].idxTI].visibilityRegion
-						<< '_' << it.table[lt.table[i].idxTI].id << ENDL;
-				}
+					*file << PUSH(it.table[lt.table[i].idxTI].visibilityRegion, it.table[lt.table[i].idxTI].id) << std::endl;
 				else
-				{
-					*file << "push offset " << it.table[lt.table[i].idxTI].visibilityRegion
-						<< '_' << it.table[lt.table[i].idxTI].id << ENDL
-						<< "push lengthof " << it.table[lt.table[i].idxTI].visibilityRegion
-						<< '_' << it.table[lt.table[i].idxTI].id << ENDL;
-				}
+					*file << PUSH_STR(it.table[lt.table[i].idxTI].visibilityRegion, it.table[lt.table[i].idxTI].id) << std::endl;
 				break;
 			case LEX_CALL:
 				idxBuf = ++i;
 				if (it.table[lt.table[idxBuf].idxTI].idtype == IT::IDTYPE::E)isExtrn = true;
 				while (lt.table[i].lexema[0] != SEQ)i++;
 				parameterCount = it.table[lt.table[i].idxTI].value.vint;
-				//проверка на колво
-				if (parameterCount != parametrs[it.table[lt.table[idxBuf].idxTI].id].size())throw ERROR_THROW_IN(301, lt.table[idxBuf].sn, 0);
+				
 				for (int j = parameterCount, k =0; j > 0; --j, k++)
 				{ 
 					--i;
-					//проверка на совпадение типов
-					if (it.table[lt.table[i].idxTI].iddatatype != parametrs[it.table[lt.table[idxBuf].idxTI].id][k].type)
-						throw ERROR_THROW_IN(300, lt.table[idxBuf].sn, 0);
 					if (it.table[lt.table[i].idxTI].iddatatype != IT::IDDATATYPE::STR && it.table[lt.table[i].idxTI].iddatatype != IT::IDDATATYPE::CHR)
-					{
-						*file << "mov ax," << it.table[lt.table[i].idxTI].visibilityRegion
-							<< '_' << it.table[lt.table[i].idxTI].id << ENDL
-							<< "mov " << parametrs[it.table[lt.table[idxBuf].idxTI].id][k].name << ",ax" << ENDL;
-					}
+						*file <<
+						PARAM_TRANS(it.table[lt.table[i].idxTI].visibilityRegion, it.table[lt.table[i].idxTI].id, parametrs[it.table[lt.table[idxBuf].idxTI].id][k].name)
+						<< std::endl;
 					else
-					{
-						*file << "cld" << ENDL << "mov ecx, lengthof " << it.table[lt.table[i].idxTI].visibilityRegion
-							<< '_' << it.table[lt.table[i].idxTI].id << ENDL
-							<< "lea edi," << parametrs[it.table[lt.table[idxBuf].idxTI].id][k].name << ENDL
-							<< "lea esi," << it.table[lt.table[i].idxTI].visibilityRegion
-							<< '_' << it.table[lt.table[i].idxTI].id << ENDL << "rep movsb" << ENDL;
-					}
+						*file << PARAM_STR_TRANS(it.table[lt.table[i].idxTI].visibilityRegion, it.table[lt.table[i].idxTI].id, parametrs[it.table[lt.table[idxBuf].idxTI].id][k].name)
+						<< std::endl;
 				}
 				if (isExtrn)
 				{
 					for (auto c : parametrs[it.table[lt.table[idxBuf].idxTI].id])
 					{
 						if (c.type != IT::IDDATATYPE::STR && c.type != IT::IDDATATYPE::CHR)
-						{
-							*file << "push " << c.name << ENDL;
-						}
+							*file << EXTR_PARAM(c.name) << std::endl;
 						else
-						{
-							*file << "push offset " << c.name << ENDL
-								<< "push lengthof " << c.name << ENDL;
-						}
+							*file << EXTR_PARAM_STR(c.name) << std::endl;
 					}
 				}
 				--i;
@@ -315,19 +237,19 @@ namespace CG
 					{
 					case IT::IDDATATYPE::BL:
 						currentType = IT::IDDATATYPE::BL;
-						*file << "push ax" << ENDL;
+						*file << EXTR_RET;
 						break;
 					case IT::IDDATATYPE::INT:
 						currentType = IT::IDDATATYPE::INT;
-						*file << "push ax" << ENDL;
+						*file << EXTR_RET;
 						break;
 					case IT::IDDATATYPE::CHR:
 						currentType = IT::IDDATATYPE::CHR;
-						*file << "push offset eax" << ENDL << "push lengthof eax" << ENDL;
+						*file << EXTR_RET_STR;
 						break;
 					case IT::IDDATATYPE::STR:
 						currentType = IT::IDDATATYPE::STR;
-						*file << "push offset eax" << ENDL << "push lengthof eax" << ENDL;
+						*file << EXTR_RET_STR;
 						break;
 					default:
 						break;
@@ -340,21 +262,19 @@ namespace CG
 					{
 					case IT::IDDATATYPE::BL:
 						currentType = IT::IDDATATYPE::BL;
-						*file << "push " << RET << it.table[lt.table[i].idxTI].id << ENDL;
+						*file << RET_VALUE(it.table[lt.table[i].idxTI].id) << std::endl;
 						break;
 					case IT::IDDATATYPE::INT:
 						currentType = IT::IDDATATYPE::INT;
-						*file << "push " << RET << it.table[lt.table[i].idxTI].id << ENDL;
+						*file << RET_VALUE(it.table[lt.table[i].idxTI].id) << std::endl;
 						break;
 					case IT::IDDATATYPE::CHR:
 						currentType = IT::IDDATATYPE::CHR;
-						*file << "push offset " << RET << it.table[lt.table[i].idxTI].id << ENDL;
-						*file << "push lengthof " << RET << it.table[lt.table[i].idxTI].id << ENDL;
+						*file << RET_STR(it.table[lt.table[i].idxTI].id);
 						break;
 					case IT::IDDATATYPE::STR:
 						currentType = IT::IDDATATYPE::STR;
-						*file << "push offset " << RET << it.table[lt.table[i].idxTI].id << ENDL;
-						*file << "push lengthof " << RET << it.table[lt.table[i].idxTI].id << ENDL;
+						*file << RET_STR(it.table[lt.table[i].idxTI].id);
 						break;
 					default:
 						break;
@@ -383,7 +303,8 @@ namespace CG
 				i++;
 			case LEX_PROC:
 				i++;
-				*file << (funcName = it.table[lt.table[i].idxTI].id) << " PROC " << SAVE_REGISTRS << ENDL << SAVE_BASE << ENDL;
+				funcName = it.table[lt.table[i].idxTI].id;
+				*file << FUNC_HEADER(funcName) << std::endl;
 				while (lt.table[i].lexema[0] != LEX_RIGHTHESIS)++i;
 				parameterCount = i;//немного не по назначению
 				while (lt.table[i].lexema[0] != LEX_LEFTHESIS)
@@ -401,19 +322,18 @@ namespace CG
 				if (resultBufferIdx != -1)
 				{
 					if (currentType != IT::IDDATATYPE::STR && currentType != IT::IDDATATYPE::CHR)
-						*file << "pop " << it.table[lt.table[resultBufferIdx].idxTI].visibilityRegion
-						<< '_' << it.table[lt.table[resultBufferIdx].idxTI].id << ENDL;
-					else *file << "cld\npop ecx\npop esi\nlea edi, " << it.table[lt.table[resultBufferIdx].idxTI].visibilityRegion
-						<< '_' << it.table[lt.table[resultBufferIdx].idxTI].id << ENDL
-						<< "rep movsb" << ENDL;
+						*file << POP(it.table[lt.table[resultBufferIdx].idxTI].visibilityRegion, it.table[lt.table[resultBufferIdx].idxTI].id)
+						<< std::endl;
+					else
+						*file << POP_STR(it.table[lt.table[resultBufferIdx].idxTI].visibilityRegion, it.table[lt.table[resultBufferIdx].idxTI].id)
+						<< std::endl;
 					resultBufferIdx = -1;
 				}
 				else if (isReturn)
 				{
 					if (currentType != IT::IDDATATYPE::STR && currentType != IT::IDDATATYPE::CHR)
-						*file << "pop ax" << ENDL << "mov " << RET << funcName << LEX_COMA << "ax" << ENDL;
-					else *file << "cld\npop ecx\npop esi\nlea edi, " << RET << funcName << ENDL
-						<< "rep movsb" << ENDL ;
+						*file << FUNC_RET(funcName);
+					else *file << FUNC_RET_STR(funcName);
 
 					isReturn = false;
 				}
@@ -422,16 +342,16 @@ namespace CG
 					switch (currentType)
 					{
 					case IT::IDDATATYPE::INT:
-						*file << "call writeNumberBin" << ENDL;
+						*file << WRITE_INT;
 						break;
 					case IT::IDDATATYPE::BL:
-						*file  << "call writeBool" << ENDL;
+						*file  <<WRITE_BOOL;
 						break;
 					case IT::IDDATATYPE::STR:
-						*file << "call writeStr" << ENDL ;
+						*file << WRITE_STR;
 						break;
 					case IT::IDDATATYPE::CHR:
-						*file << "call writeStr" << ENDL;
+						*file << WRITE_STR;
 						break;
 					default:
 						break;
@@ -442,29 +362,23 @@ namespace CG
 				isExpr = false;
 				break;
 			case LEX_MAIN:
-				*file << "WSA2020 PROC " << SAVE_REGISTRS << ENDL << SAVE_BASE << ENDL << W1251_SET << ENDL;
-				funcName = "WSA2020";
+				funcName = MAIN_NAME;
+				*file << FUNC_HEADER(funcName);
 				isMain = true;
 				break;
 			case LEX_LEFTBRACE:
 				if (isCycle)
-				{
-					*file << "pop eax" << ENDL
-						<< "cmp eax,1" << ENDL << "jz " << currentCycleName << "_BEGIN" << ENDL
-						<< "jnz " << currentCycleName << "_END" << ENDL
-						<< currentCycleName << "_BEGIN: " << ENDL;
-				}
+					*file << CYCLE_HEADER(currentCycleName);
 				break;
 			case LEX_BRACELET:
 				if (!isCycle)
 				{
 					if (isMain)isMain = false;
-					*file << BASE_RECOVERY << ENDL << "ret" << ENDL << funcName << " ENDP" << ENDL;
+					*file << BASE_RECOVERY  << "\nret\n"  << OVERFLOW  << ZERODIV << std::endl << funcName << " ENDP" << std::endl;
 				}
 				else
 				{
-					*file << "jmp " << currentCycleName << ENDL
-						<< currentCycleName << "_END: " << ENDL;
+					*file << CYCLE_FOOTER(currentCycleName);
 					isCycle = false;
 				}
 				break;
@@ -483,14 +397,9 @@ namespace CG
 				break;
 			}
 		}
+		*file << ASM_MAIN;
 	}
 
-	void asmMain(std::ofstream* file)
-	{
-		*file << "main PROC" << ENDL << ENDL << "call WSA2020" << ENDL
-			<< "push eax" << ENDL << "call ExitProcess" << ENDL
-			<< "main ENDP" << ENDL << "end main";
-	}
 
 	void CloseFile(std::ofstream* file)
 	{
