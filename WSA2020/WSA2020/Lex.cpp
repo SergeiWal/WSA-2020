@@ -18,7 +18,7 @@ namespace LEX
 
 		for (int i = 0; i < TOKENS_ARRAY_SIZE; ++i)
 		{
-			if (word.value[0] == tokensArray[i].firstSymbol)
+			if (str[0] == tokensArray[i].firstSymbol)
 			{
 				tokensArray[i].fst.string = str;
 				if (FST::execute(tokensArray[i].fst))
@@ -400,101 +400,108 @@ namespace LEX
 		return number;
 	}
 
-	void LexTableOut(LT::LexTable lt, IT::IdTable it)
+	void LexTableOut(std::ofstream* out, LT::LexTable lt, IT::IdTable it)
 	{
-		std::ofstream out;
-		out.open("LexTable.txt");
-		if (!out.is_open())throw ERROR_THROW(123);
-		int line = 0;
-		out << "0000 ";
+		int number = 0;
+		*out << std::setfill(' ') << std::setw(8) << "Number | " << std::setw(10) << 
+			"lexema | " << std::setw(10) << "line | " << std::setw(10) << "ITIndex |\n";
 		for (int i = 0; i < lt.size; ++i)
 		{
 			if (lt.table[i].lexema != NULL)
 			{
-				if (lt.table[i].sn > line)
-				{
-					out << "\n";
-					line = lt.table[i].sn;
-					if (line < 10)out << "000";
-					if (line < 100 && line >= 10)out << "00";
-					if (line >= 100 && line < 1000)out << "0";
-					out << line << " ";
-				}
-				out << lt.table[i].lexema;
-				if (lt.table[i].lexema[0] == SEQ)out << it.table[lt.table[i].idxTI].value.vint;
-				else if (lt.table[i].lexema[0] == LEX_OPERATION)out << '{' << it.table[lt.table[i].idxTI].id << '}';
+				*out << std::setw(6) << number << " | "<< std::setw(7) << lt.table[i].lexema << " | " << std::setw(7) << lt.table[i].sn << " | ";
+				//if (lt.table[i].lexema[0] == SEQ)out << it.table[lt.table[i].idxTI].value.vint;
+				//else if (lt.table[i].lexema[0] == LEX_OPERATION)out << '{' << it.table[lt.table[i].idxTI].id << '}';
+				if (lt.table[i].lexema[0] == LEX_ID || lt.table[i].lexema[0] == LEX_LITERAL)*out << std::setw(7) << lt.table[i].idxTI << " |\n";
+				else *out << std::right << std::setw(10) << " |\n";
+				number++;
 			}
 		}
-		out.close();
+		
 	}
 
-	void IdTableOut(IT::IdTable it)
+	void IdTableOut(std::ofstream* out, IT::IdTable it)
 	{
-		std::ofstream out;
-		out.open("IdTable.txt");
-		if (!out.is_open())throw ERROR_THROW(123);
-		out << "\t" << "NAME" << "\t" << "DATATYPE" << "\t" << "VALUE"  << "\t" << "TYPE" << "\t\t\t" << "REFERENCE" << "\t" << "VISIBILITY\n";
+		*out << std::setfill(' ') << std::setw(10) << "N | " << std::setw(10) << "NAME | " << std::setw(20) << "TYPE | " << std::setw(10) <<
+			"REFERENCE | " << std::setw(10) << "VISIBLE |" << std::setw(10) <<
+			"DATATYPE | " << std::setw(10) << " VALUE\n";
 		for (int i = 0; i < it.size; ++i)
 		{
-			
-				if (i < 10)out << "00";
-				if (i < 100 && i >= 10)out << "0";
-				out << i << "\t" << it.table[i].id << "\t";
-
-				switch (it.table[i].iddatatype)
-				{
-				case IT::IDDATATYPE::INT:
-					out << "short" << "\t";
-					out << it.table[i].value.vint << "\t";
-					break;
-				case IT::IDDATATYPE::STR:
-					out << "string" << "\t";
-					if (it.table[i].value.vstr.len == 0)out << "\"\"" << "\t";
-					else out << '\"' << it.table[i].value.vstr.str << "\"\t";
-					break;
-				case IT::IDDATATYPE::BL:
-					out << "bool" << "\t";
-					if (it.table[i].value.vbool)out << "true" << "\t";
-					else out << "false" << "\t";
-					break;
-				case IT::IDDATATYPE::CHR:
-					out << "short" << "\t";
-					out << '\'' << it.table[i].value.vchar << "\'" << "\t";
-					break;
-				default:
-					out << "void" << "\t";
-					out << "none" << "\t";
-					break;
-				}
+			if (it.table[i].idtype != IT::IDTYPE::O)
+			{
+				*out << std::setw(8) << i << "|" << std::setw(9) << it.table[i].id << "|";
 
 				switch (it.table[i].idtype)
 				{
 				case IT::IDTYPE::E:
-					out << "extern function" << "\t\t";
+					*out << std::setw(20) << "extern function |";
 					break;
 				case IT::IDTYPE::F:
-					out << "function name" << "\t\t";
+					*out << std::setw(20) << "function name |";
 					break;
 				case IT::IDTYPE::P:
-					out << "procedure name" << "\t\t";
+					*out << std::setw(20) << "procedure name |";
 					break;
 				case IT::IDTYPE::V:
-					out << "variable name" << "\t\t";
+					*out << std::setw(20) << "variable name |";
 					break;
 				case IT::IDTYPE::L:
-					out << "literal" << "\t\t";
+					*out << std::setw(20) << "literal name |";
 					break;
 				case IT::IDTYPE::A:
-					out << "parameter" << "\t\t";
+					*out << std::setw(20) << "parameter |";
 					break;
 				default:
 					break;
 				}
 
-				out << it.table[i].idxfirstLE << "\t\t";
+				*out << std::setw(11) << it.table[i].idxfirstLE << "|";
+				*out << std::setw(10) << it.table[i].visibilityRegion << "|";
 
-				out << it.table[i].visibilityRegion << std::endl;
+
+				switch (it.table[i].iddatatype)
+				{
+				case IT::IDDATATYPE::INT:
+					*out << std::setw(11) << "short | " << it.table[i].value.vint << std::endl;
+					break;
+				case IT::IDDATATYPE::STR:
+					*out << std::setw(11) << "string | " << it.table[i].value.vstr.str << std::endl;
+					break;
+				case IT::IDDATATYPE::BL:
+					*out << std::setw(11) << "bool | ";
+					if (it.table[i].value.vbool)*out << "true" << std::endl;
+					else *out << "false" << std::endl;;
+					break;
+				case IT::IDDATATYPE::CHR:
+					*out << std::setw(11) << "char | " << it.table[i].value.vchar << std::endl;
+					break;
+				default:
+					*out << std::setw(11) << "void | " << "none" << std::endl;
+					break;
+				}
+
+			}
 		}
-		out.close();
+	}
+
+	void FullLexTable(std::ofstream* out, LT::LexTable lt, IT::IdTable it)
+	{
+		int number = 0;
+		*out << std::setfill('0') << std::setw(5) << number << " " << std::setfill(' ');
+		for (int i = 0; i < lt.size; ++i)
+		{
+			if (lt.table[i].lexema != NULL)
+			{
+				if (number != lt.table[i].sn)
+				{
+					*out << std::endl << std::setfill('0') << std::setw(5) << number << " " << std::setfill(' ');
+					number = lt.table[i].sn;
+				}
+				*out << lt.table[i].lexema[0];
+				if (lt.table[i].lexema[0] == SEQ)*out << it.table[lt.table[i].idxTI].value.vint;
+				else if (lt.table[i].lexema[0] == LEX_OPERATION)*out << '{' << it.table[lt.table[i].idxTI].id << '}';
+			}
+		}
+		*out << std::endl;
 	}
 }

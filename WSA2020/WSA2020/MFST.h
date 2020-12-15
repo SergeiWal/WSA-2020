@@ -5,7 +5,7 @@
 #include "GRB.h"
 #include "Lex.h"
 
-#define  MFST_TRACE_START std::cout<<std::setw(4)<<std::left<<"Шаг"<<":"\
+#define  MFST_TRACE_START(log) log<<std::setw(4)<<std::left<<"Шаг"<<":"\
 							      <<std::setw(20)<<std::left << " Правило"\
 							      <<std::setw(30)<<std::left << " Входная лента"\
 							      <<std::setw(20)<<std::left << " Стек"\
@@ -14,9 +14,37 @@
 #define MFST_DIAGN_MAXSIZE 2*ERROR_MAXSIZE_MESSAGE
 #define MFST_DIAGN_NUMBER 3
 
+template <typename T>
+class Stack
+{
+private:
+	std::stack<T> steck;
+public:
+	void push(T st) {
+		steck.push(st);
+	}
+	void pop() {
+		steck.pop();
+	}
+	T top() {
+		return steck.top();
+	}
+	int size() {
+		return steck.size();
+	}
+	T operator[](int s) {
+		std::stack<T> st;
+		st = steck;
+		for (int i = (s + 1); i < steck.size(); i++)
+		{
+			st.pop();
+		}
+		return st.top();
+	}
+};
 
+typedef Stack<short> MFSTSTACK;
 
-typedef std::stack<short> MFSTSTACK;
 namespace MFST
 {
 	struct MfstState
@@ -75,7 +103,7 @@ namespace MFST
 		GRB::Greibach greibach;
 		LEX::LEX lex;
 		MFSTSTACK st;
-		std::stack<MfstState> storestate;
+		Stack<MfstState> storestate;
 		Mfst();
 		Mfst(
 			LEX::LEX plex,
@@ -84,15 +112,15 @@ namespace MFST
 		char* getCSt(char* buf);
 		char* getCLenta(char* buf, short pos, short n = 25);
 		char* getDiagnosis(short n, char* buf);
-		bool savestate();
-		bool reststate();
+		bool savestate(std::ofstream* out);
+		bool reststate(std::ofstream* out);
 		bool push_chain(
 			GRB::Rule::Chain chain
 		);
-		RC_STEP step();
-		bool start();
+		RC_STEP step(std::ofstream* out);
+		bool start(std::ofstream* out);
 		bool savediagnosis(RC_STEP pprc_step);
-		void printrules();
+		void printrules(std::ofstream* out);
 
 		struct Deducation
 		{

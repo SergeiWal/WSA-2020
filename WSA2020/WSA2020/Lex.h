@@ -44,7 +44,7 @@
 						FST::NODE(2, FST::RELATION('0', 1), FST::RELATION('1', 1)),\
 						FST::NODE(2, FST::RELATION('b', 2), FST::RELATION('o', 3)),\
 						FST::NODE(4, FST::RELATION('0', 2), FST::RELATION('1', 2), FST::RELATION('0', 4), FST::RELATION('1', 4)),\
-						FST::NODE(14, FST::RELATION('0', 3), FST::RELATION('1', 3), FST::RELATION('2', 3), FST::RELATION('3', 3),\
+						FST::NODE(16, FST::RELATION('0', 3), FST::RELATION('1', 3), FST::RELATION('2', 3), FST::RELATION('3', 3),\
 						FST::RELATION('4', 3), FST::RELATION('5', 3), FST::RELATION('6', 3), FST::RELATION('7', 3),\
 						FST::RELATION('0', 4), FST::RELATION('1', 4), FST::RELATION('2', 4), FST::RELATION('3', 4),\
 						FST::RELATION('4', 4), FST::RELATION('5', 4), FST::RELATION('6', 4), FST::RELATION('7', 4)),\
@@ -203,8 +203,8 @@
 				
 namespace LEX
 {
-	enum class LexType { T = 1, L = 2, V = 3, M = 4, F = 5, P = 6, R = 7, C = 8, W = 9, O = 10, I = 11, E =12 };
-	
+	enum class LexType { T = 1, L = 2, V = 3, M = 4, F = 5, P = 6, R = 7, C = 8, W = 9, O = 10, I = 11, E = 12 };
+
 	struct LexExample
 	{
 		char firstSymbol;
@@ -216,7 +216,7 @@ namespace LEX
 			FST::FST nfst,
 			LexType tp
 		);
-		
+
 	};
 
 	struct LEX
@@ -227,7 +227,7 @@ namespace LEX
 												LEX_RIGHTHESIS,LEX_EQUALL, LEX_CALL };
 	};
 
-	LexType LAnaliz( In::word word);
+	LexType LAnaliz(In::word word);
 	unsigned char* UchVectorToString(const std::vector<unsigned char>& word);
 
 	void SetNewLtNodeValue(LT::Entry& entry, char value);
@@ -243,6 +243,7 @@ namespace LEX
 	int BinToInt(std::vector<unsigned char> word);
 
 	void TableFill(In::IN in, LEX& lex);
-	void LexTableOut(LT::LexTable lt, IT::IdTable it);
-	void IdTableOut(IT::IdTable it);
+	void LexTableOut(std::ofstream* out, LT::LexTable lt, IT::IdTable it);
+	void IdTableOut(std::ofstream* out, IT::IdTable it);
+	void FullLexTable(std::ofstream* out, LT::LexTable lt, IT::IdTable it);
 }

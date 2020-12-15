@@ -51,7 +51,8 @@ namespace IT
 			{
 			case IT::IDDATATYPE::BL:
 				for (int i = 0; i < idtable.size; ++i)
-					if (idtable.table[i].idtype == IT::IDTYPE::L && idtable.table[i].value.vbool == ent.value.vbool)
+					if (idtable.table[i].idtype == IT::IDTYPE::L && idtable.table[i].iddatatype ==IT::IDDATATYPE::BL && 
+						idtable.table[i].value.vbool == ent.value.vbool)
 						return i;
 				break;
 			case IT::IDDATATYPE::INT:

@@ -7,29 +7,29 @@ char rbuf[205], sbuf[205], lbuf[1024];
 #define TS(n) GRB::Rule::Chain::T(n)
 #define ISNS(n) GRB::Rule::Chain::isN(n)
 
-#define MFST_TRACE1 std::cout <<std::setw(4)<<std::left<<++FST_TRACE_n<<": "\
+#define MFST_TRACE1(log)	log <<std::setw(4)<<std::left<<++FST_TRACE_n<<": "\
 						    <<std::setw(20)<<std::left << rule.getCRule(rbuf, nrulechain)\
 						    <<std::setw(30)<<std::left << getCLenta(lbuf, lenta_position)\
 						    <<std::setw(20)<<std::left << getCSt(sbuf)\
 						    <<std::endl;	
-#define MFST_TRACE2 std::cout <<std::setw(4)<<std::left<< FST_TRACE_n<<": "\
+#define MFST_TRACE2(log)	log <<std::setw(4)<<std::left<< FST_TRACE_n<<": "\
 						    <<std::setw(20)<<std::left << " "\
 						    <<std::setw(30)<<std::left << getCLenta(lbuf, lenta_position)\
 						    <<std::setw(20)<<std::left << getCSt(sbuf)\
 						    <<std::endl;
-#define MFST_TRACE3 std::cout <<std::setw(4)<<std::left<<++FST_TRACE_n<<": "\
+#define MFST_TRACE3(log)	log <<std::setw(4)<<std::left<<++FST_TRACE_n<<": "\
 						    <<std::setw(20)<<std::left << " "\
 						    <<std::setw(30)<<std::left << getCLenta(lbuf, lenta_position)\
 						    <<std::setw(20)<<std::left << getCSt(sbuf)\
 						    <<std::endl;
-#define MFST_TRACE4(c) std::cout <<std::setw(4)<<std::left<< ++FST_TRACE_n<<": "\
+#define MFST_TRACE4(log,c)	log <<std::setw(4)<<std::left<< ++FST_TRACE_n<<": "\
 						    <<std::setw(20)<<std::left<<c<<std::endl;
-#define MFST_TRACE5(c) std::cout <<std::setw(4)<<std::left<< FST_TRACE_n<<": "\
+#define MFST_TRACE5(log,c) log <<std::setw(4)<<std::left<< FST_TRACE_n<<": "\
 						    <<std::setw(20)<<std::left<<c<<std::endl;
-#define MFST_TRACE6(c,k) std::cout <<std::setw(4)<<std::left<< FST_TRACE_n<<": "\
+#define MFST_TRACE6(log,c,k) log <<std::setw(4)<<std::left<< FST_TRACE_n<<": "\
 						    <<std::setw(20)<<std::left<<c<<k<<std::endl;
 
-#define MFST_TRACE7 std::cout <<std::setw(4)<<std::left<< state.lenta_position<<": "\
+#define MFST_TRACE7(log) log <<std::setw(4)<<std::left<< state.lenta_position<<": "\
 				    <<std::setw(20)<<std::left<<rule.getCRule(rbuf,state.nrulechain)<<std::endl;
 
 
@@ -91,7 +91,7 @@ namespace MFST
 		nrulechain = -1;
 	}
 
-	Mfst::RC_STEP Mfst::step()
+	Mfst::RC_STEP Mfst::step(std::ofstream* out)
 	{
 		RC_STEP rc = SURPRISE;
 		if (lenta_position < lenta_size)
@@ -104,18 +104,18 @@ namespace MFST
 					GRB::Rule::Chain chain;
 					if ((nrulechain = rule.getNextChain(lenta[lenta_position], chain, nrulechain + 1)) >= 0)
 					{
-						MFST_TRACE1
-							savestate();
+						MFST_TRACE1(*out)
+							savestate(out);
 						st.pop(); 
 						push_chain(chain);
 						rc = NS_OK;
-						MFST_TRACE2
+						MFST_TRACE2(*out)
 					}
 					else
 					{
-						MFST_TRACE4("TNS_NORULECHAIN/NS_NORULE")
+						MFST_TRACE4(*out, "TNS_NORULECHAIN/NS_NORULE")
 						savediagnosis(NS_NORULECHAIN);
-						rc = reststate() ? NS_NORULECHAIN : NS_NORULE;
+						rc = reststate(out) ? NS_NORULECHAIN : NS_NORULE;
 					}
 				}
 				else rc = NS_ERROR;
@@ -126,11 +126,11 @@ namespace MFST
 				st.pop();
 				nrulechain = -1;
 				rc = TS_OK;
-				MFST_TRACE3
+				MFST_TRACE3(*out)
 			}
-			else { MFST_TRACE4("TS_NOK/NS_NORULECHAIN") rc = reststate() ? TS_NOK : NS_NORULECHAIN; }
+			else { MFST_TRACE4(*out, "TS_NOK/NS_NORULECHAIN") rc = reststate(out) ? TS_NOK : NS_NORULECHAIN; }
 		}
-		else { rc = LENTA_END; MFST_TRACE4("LENTA_END") }     
+		else { rc = LENTA_END; MFST_TRACE4(*out, "LENTA_END") }
 		return rc;
 	}
 
@@ -141,13 +141,13 @@ namespace MFST
 		return true;
 	}
 
-	bool Mfst::savestate()
+	bool Mfst::savestate(std::ofstream* out)
 	{
 		storestate.push(MfstState(lenta_position, st, nrule, nrulechain));
-		MFST_TRACE6("SAVESTATE:", storestate.size());
+		MFST_TRACE6(*out, "SAVESTATE:", storestate.size());
 		return true;
 	}
-	bool Mfst::reststate()
+	bool Mfst::reststate(std::ofstream* out)
 	{
 		bool rc = false;
 		MfstState state;
@@ -159,8 +159,8 @@ namespace MFST
 			nrule = state.nrule;
 			nrulechain = state.nrulechain;
 			storestate.pop();
-			MFST_TRACE5("RESSTATE")
-			MFST_TRACE2
+			MFST_TRACE5(*out, "RESSTATE")
+			MFST_TRACE2(*out)
 		}
 		return rc;
 	}
@@ -178,32 +178,36 @@ namespace MFST
 		return rc;
 	}
 
-	bool Mfst::start()
+	bool Mfst::start(std::ofstream* out)
 	{
 		bool rc = false;
 		RC_STEP rc_step = SURPRISE;
 		char buf[MFST_DIAGN_MAXSIZE];
-		rc_step = step();
+		rc_step = step(out);
 		while (rc_step == NS_OK || rc_step == NS_NORULECHAIN || rc_step == TS_OK ||
-			rc_step == TS_NOK)rc_step = step();
+			rc_step == TS_NOK)rc_step = step(out);
 
 		switch (rc_step)
 		{
-		case LENTA_END:  MFST_TRACE4("------>LENTA_END")
-			std::cout << "-------------------------------------------------------------------  -----" << std::endl;
+		case LENTA_END:  MFST_TRACE4(*out, "------>LENTA_END")
+			*out << "-------------------------------------------------------------------  -----" << std::endl;
 			sprintf_s(buf, MFST_DIAGN_MAXSIZE, "%d всего строк %d, синтаксический анализ выполнен без ошибок" , 0, lenta_size);
-			std::cout << std::setw(4) << std::left << 0 << ": всего строк " << lenta_size << ", синтаксический анализ выполнен без ошибок" << std::endl;
+			*out << std::setw(4) << std::left << 0 << ": всего строк " << lenta_size << ", синтаксический анализ выполнен без ошибок" << std::endl;
 			rc = true;
 			break;
-		case NS_NORULE:   MFST_TRACE4("------->NS_NORULE")
-			std::cout << "-------------------------------------------------------------------  -----" << std::endl;
+		case NS_NORULE:   MFST_TRACE4(*out,"------->NS_NORULE")
+			* out << "-------------------------------------------------------------------  -----" << std::endl;
 			std::cout << getDiagnosis(0, buf) << std::endl;
 			std::cout << getDiagnosis(1, buf) << std::endl;
 			std::cout << getDiagnosis(2, buf) << std::endl;
+
+			*out << getDiagnosis(0, buf) << std::endl;
+			*out << getDiagnosis(1, buf) << std::endl;
+			*out << getDiagnosis(2, buf) << std::endl;
 			break;
-		case NS_NORULECHAIN: MFST_TRACE4("----->NS_NORULECHAIN")break;
-		case NS_ERROR:		 MFST_TRACE4("----->NS_ERROR")break;
-		case SURPRISE:		 MFST_TRACE4("----->SURPRISE")break;
+		case NS_NORULECHAIN: MFST_TRACE4(*out,"----->NS_NORULECHAIN")break;
+		case NS_ERROR:		 MFST_TRACE4(*out,"----->NS_ERROR")break;
+		case SURPRISE:		 MFST_TRACE4(*out,"----->SURPRISE")break;
 		}
 
 		return rc;
@@ -245,17 +249,18 @@ namespace MFST
 		return rc;
 	}
 
-	void Mfst::printrules()
+	void Mfst::printrules(std::ofstream* out)
 	{
 		MfstState state;
 		GRB::Rule rule;
-		std::stack<MfstState> temp = storestate;
+		//std::stack<MfstState> temp = storestate;
 		for (unsigned short k = 0; k < storestate.size(); ++k)
 		{
-			state = temp.top();
-			temp.pop();
+			//state = temp.top();
+			//temp.pop();
+			state = storestate[k];
 			rule = greibach.getRule(state.nrule);
-			MFST_TRACE7
+			MFST_TRACE7(*out)
 		}
 	}
 
@@ -265,11 +270,12 @@ namespace MFST
 		GRB::Rule rule;
 		deducation.nrules = new short[deducation.size = storestate.size()];
 		deducation.nruleschains = new short[deducation.size];
-		std::stack<MfstState> temp = storestate;
+		//std::stack<MfstState> temp = storestate;
 		for (unsigned short k = 0; k < storestate.size(); ++k)
 		{
-			state = temp.top();
-			temp.pop();
+			//state = temp.top();
+			//temp.pop();
+			state = storestate[k];
 			deducation.nrules[k] = state.nrule;
 			deducation.nruleschains[k] = state.nrulechain;
 		}

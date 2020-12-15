@@ -15,7 +15,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	{
 		Parm::PARM parm = Parm::getparm(argc, argv);
 		log = Log::getlog(parm.log);
-		Log::WriteLine(log, "Логический анализатор: ", "");
+		Log::WriteLine(log, "WSA2020: ", "");
 		Log::WriteLog(log);
 		Log::WriteParm(log, parm);
 		In::IN in = In::getin(parm.in);
@@ -23,16 +23,21 @@ int _tmain(int argc, _TCHAR* argv[])
 		lex.lextable = LT::Create(LT_MAXSIZE);
 		lex.idtable = IT::Create(in.text.size());
 		LEX::TableFill(in, lex);
-		LEX::LexTableOut(lex.lextable, lex.idtable);
-		LEX::IdTableOut(lex.idtable);
-		MFST_TRACE_START
+		*log.stream << std::internal << std::setfill('-') << std::setw(48) << "LEX TABLE" << std::setw(48) << "" << std::endl;
+		LEX::LexTableOut(log.stream, lex.lextable, lex.idtable);
+		*log.stream << std::internal << std::setfill('-') << std::setw(48) << " ID TABLE " << std::setw(48) << "" << std::endl;
+		LEX::IdTableOut(log.stream, lex.idtable);
+		*log.stream << std::internal << std::setfill('-') << std::setw(48) << "IN FILE LEXEMS" << std::setw(48) << "" << std::endl;
+		LEX::FullLexTable(log.stream, lex.lextable, lex.idtable);
+		*log.stream << std::internal << std::setfill('-') << std::setw(48) << " SYNTAX " << std::setw(48) << "" << std::endl << std::setfill(' ');
+		MFST_TRACE_START(*log.stream)
 			MFST::Mfst mfst(lex, GRB::getGreibach());
-		if(!mfst.start())throw ERROR_THROW_IN(606, 0, 0);
+		if(!mfst.start(log.stream))throw ERROR_THROW_IN(606, 0, 0);
 		mfst.savededucation();
-		mfst.printrules();
+		mfst.printrules(log.stream);
 		PBN::BuildCodeInPN(lex);
-		LEX::LexTableOut(lex.lextable, lex.idtable);
-		LEX::IdTableOut(lex.idtable);
+		*log.stream << std::internal << std::setfill('-') << std::setw(48) << "IN FILE AFTER PB" << std::setw(48) << "" << std::endl << std::setfill(' ');
+		LEX::FullLexTable(log.stream, lex.lextable, lex.idtable);
 		SA::SemanticsAnaliz(lex.idtable, lex.lextable);
 		std::ofstream* file = CG::CreateAsmFile();
 		CG::ExtrnFuncAdd(file, lex.idtable, lex.lextable);

@@ -1,66 +1,76 @@
-func short userFunc(short a, short b)
-{
-	var short c;
-	c = c + a*b;
-	ret c;
-}
-
 extr short  random(short a, short b);
 extr short len(string s);
 extr bool writeOct(short n);
 
-proc userProc()
+
+func short fact(short numb)
 {
-	write 0b11;
+	var short result;
+	result = 0b1;
+	while (numb > 0b1)
+	{
+		result = result * numb;
+		numb = numb - 0b1;
+	}
+	ret result;
+}
+
+
+proc task(string s1, string s2)
+{
+	var string dest;
+	dest = s1 + s2;
+	write dest;
+	write $len(dest);
 }
 
 main
 {
 	var char ch;
 	ch = 'a';
+	write "Контрольный пример";
+
 	write ch;
-	var string s1; 
+	write "Получим факториал от числа:";
+	var short numb1;
+	numb1 = 0o6;
+	$writeOct(numb1);
+	write "Результат:";
+	write $fact(numb1);
+
+	
+	ch = 'b';
+	write ch;
+	write "Получим целое и остаток от деления 5 на 2:";
+	var short a;
+	var short b;
+	var short c;
+	a=0o5;
+	b=0o2;
+	write "Целое:";
+	c = a/b;
+	write c;
+	write "Остаток:";
+	c = a%b;
+	write c;
+
+	ch = 'c';
+	write ch;
+	c = $random(0b100,0b10) + 1b1;
+	write c;
+
+	ch='d';
+	write ch;
+	write "Сложим две строки и выведем их длину";
+	var string s1;
 	var string s2;
-	var short v1 ;
-	var short v2 ;
-	var bool b1 ;
-	var bool b2 ;
-	var string buf ;
-	var short TCHAR ;
-	s1 = "Привет, Мир!!!!";
-	s2 = "Hello, World!!!";
-	v1 = 0b1100;
-	v2 = 0b100;
-	b1 = false;
-	b2 = b1;
-	TCHAR = 1b11;
+	s1 = "HELLO, ";
+	s2 = "WORLD!";
+	$task(s2,s1);
 
-	var short v3;
-
-	v3 = (v1 + v2)*v1/v2;
-	var short i;
-	i = 0b0;
-	while(i < v3)
-	{
-		write i;
-		i = i + 0b1;	
-	}
-
-	v3 = $len(s1);
-	write "Длина строки";
-	write v3;
-	$writeOct(0b100);
-	var string s3;
-	while(s1 == s2)
-	{
-		s1 = s1 + s2;
-	}
-
-	v2 = $random(0b100,0b0) + 0b10;
-	v2 = $userFunc(0b11, 0b101);
-	write b1;
-
-	$userProc();
-	write s1;
+	var bool end;
+	end = true;
+	write "Контрольный пример окончен успешно:";
+	write end;
 }
 
