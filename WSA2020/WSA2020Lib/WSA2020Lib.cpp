@@ -38,10 +38,10 @@ extern "C"
 		int len = 0;
 		do
 		{
-			dest[len] = number % 2;
+			dest[len] = abs(number) % 2;
 			number /= 2;
 			len++;
-		} while (number > 0);
+		} while (abs(number) > 0);
 		len--;
 
 		for (; len >= 0; --len)std::cout << dest[len];

@@ -1,0 +1,7 @@
+main
+{
+  	var short i;
+	i = 0b10;
+	i = -i;
+	write i;
+}

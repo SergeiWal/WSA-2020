@@ -1,0 +1,11 @@
+func short fc()
+{
+	var string c;
+	c = "error";
+	ret c;
+}
+
+main
+{
+$fc();
+}

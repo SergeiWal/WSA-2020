@@ -12,8 +12,8 @@ namespace PBN
 				return i + 1;
 			else if(lt.table[i].lexema[0] == LEX_OPERATION)
 				for (; ; i--) 
-					if (lt.table[i].lexema[0] == LEX_LEFTHESIS)
-						return i ;
+					if (lt.table[i].lexema[0] == LEX_SEMICOLON)
+						return i + 2;
 		}	
 		return -1;
 	}

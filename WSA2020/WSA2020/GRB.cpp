@@ -24,10 +24,12 @@ namespace GRB
 			Rule::Chain(8, TS('e'), TS('t'), TS('i'), TS('('), NS('F'), TS(')'), TS(';'), NS('S'))
 		),
 		Rule(NS('N'), GRB_ERROR_SERIES + 1,
-			14,
+			16,
 			Rule::Chain(4, TS('v'), TS('t'), TS('i'), TS(';')),
 			Rule::Chain(3, TS('r'), NS('E'), TS(';')),
 			Rule::Chain(4, TS('i'), TS('='), NS('E'), TS(';')),
+			Rule::Chain(4, TS('i'), TS('='), NS('M'), TS(';')),
+			Rule::Chain(5, TS('i'), TS('='), NS('M'), TS(';'), NS('N')),
 			Rule::Chain(5, TS('v'), TS('t'), TS('i'), TS(';'), NS('N')),
 			Rule::Chain(4, TS('r'), NS('E'), TS(';'), NS('N')),
 			Rule::Chain(5, TS('i'), TS('='), NS('E'), TS(';'), NS('N')),

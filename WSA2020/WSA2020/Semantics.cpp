@@ -27,6 +27,7 @@ namespace SA
 		bool isCycle = false; //нахождение в цикле
 		bool isCycleOpen = false;
 		bool isOpen = false; // открыта ли фигурная скобка
+		bool isRet = false; //
 
 		SA sa;
 		sa.standartFuncInfo = {SFL_INFO};
@@ -130,9 +131,9 @@ namespace SA
 				sa.dataTypeHistory.push(sa.functions[currentName].returnType);
 				break;
 			case LEX_ID:
-				sa.dataTypeHistory.push(idtable.table[lextable.table[i].idxTI].iddatatype);
-				break;
 			case LEX_LITERAL:
+				if (isRet && idtable.table[lextable.table[i].idxTI].iddatatype != sa.functions[currentName].returnType)
+					throw ERROR_THROW_IN(310, lextable.table[i].sn, 0);
 				sa.dataTypeHistory.push(idtable.table[lextable.table[i].idxTI].iddatatype);
 				break;
 			case LEX_OPERATION:
@@ -172,6 +173,7 @@ namespace SA
 				
 				break;
 			case LEX_SEMICOLON:
+				isRet = false;
 				while (!sa.dataTypeHistory.empty())sa.dataTypeHistory.pop();
 				break;
 			case LEX_CYCLE:
@@ -201,6 +203,9 @@ namespace SA
 					isCycle = false;
 					isCycleOpen = false;
 				}
+				break;
+			case LEX_RETURN:
+				isRet = true;
 				break;
 			default:
 				break;

@@ -15,7 +15,7 @@ func short fact(short numb)
 	ret result;
 }
 
-
+ 
 proc task(string s1, string s2)
 {
 	var string dest;
