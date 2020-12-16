@@ -1,0 +1,4 @@
+func short fs()
+{
+ret 0b11;
+}

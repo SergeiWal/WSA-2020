@@ -89,7 +89,7 @@
 #define EXPR_STR_NOT_EQUEL(n) "call stringEquel\npush eax\ncmp eax,1\njnz true_"<<n <<"\npush 0\njmp end_"<<n<<"\ntrue_"<<n<<": \npush 1\nend_"<<n<<": \n"
 
 
-
+#pragma warning(disable : 4996)
 
 namespace CG
 {
@@ -102,7 +102,7 @@ namespace CG
 	};
 
 
-	std::ofstream* CreateAsmFile();
+	std::ofstream* CreateAsmFile(wchar_t outfile[]);
 	void ExtrnFuncAdd(std::ofstream* file, IT::IdTable it, LT::LexTable lt);
 	void ConstBlockFill(std::ofstream* file, IT::IdTable it);
 	void SetDataValue(std::ofstream* file, IT::IdTable it, int pos);

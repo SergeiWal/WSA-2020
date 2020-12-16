@@ -2,13 +2,13 @@
 
 namespace CG
 {
-	std::ofstream* CreateAsmFile()
+	std::ofstream* CreateAsmFile(wchar_t outfile[])
 	{
-		std::ofstream* stream = new std::ofstream;
-		stream->open(FILENAME);
-		if (!stream->is_open())throw ERROR_THROW(124);
-		*stream << ASM_HEADER << STLIB_FUNC << std::endl;
-		return stream;
+		std::ofstream* out = new std::ofstream;
+		out->open(outfile);
+		if (!out->is_open())throw ERROR_THROW(112);
+		*out << ASM_HEADER << STLIB_FUNC << std::endl;
+		return out;
 	}
 
 

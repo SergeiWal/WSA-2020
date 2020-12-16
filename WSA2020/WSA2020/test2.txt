@@ -1,0 +1,5 @@
+main
+{
+var short a;
+a = b;
+}

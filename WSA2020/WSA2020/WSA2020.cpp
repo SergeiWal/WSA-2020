@@ -39,7 +39,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		*log.stream << std::internal << std::setfill('-') << std::setw(48) << "IN FILE AFTER PB" << std::setw(48) << "" << std::endl << std::setfill(' ');
 		LEX::FullLexTable(log.stream, lex.lextable, lex.idtable);
 		SA::SemanticsAnaliz(lex.idtable, lex.lextable);
-		std::ofstream* file = CG::CreateAsmFile();
+		std::ofstream* file = CG::CreateAsmFile(parm.out);
 		CG::ExtrnFuncAdd(file, lex.idtable, lex.lextable);
 		CG::ConstBlockFill(file, lex.idtable);
 		CG::DataBLockFILL(file, lex.idtable);

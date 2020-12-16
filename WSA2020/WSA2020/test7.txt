@@ -1,0 +1,10 @@
+func short fs(short i)
+{
+i = i + i;
+ret i;
+}
+main
+{
+var short a;
+a = $fs("Число");
+}

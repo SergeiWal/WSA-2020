@@ -1,0 +1,5 @@
+var short i;
+main
+{
+write "Hello";
+}

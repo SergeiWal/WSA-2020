@@ -1,0 +1,6 @@
+main
+{
+var short i;
+i = 0b1;
+i=i++i;
+}

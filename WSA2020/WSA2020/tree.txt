@@ -1,0 +1,37 @@
+extr bool writeOct(short n);
+
+
+func short fact(short numb)
+{
+	var short result;
+	result = 0b1;
+	while (numb > 0b1)
+	{
+		result = result * numb;
+		numb = numb - 0b1;
+	}
+	ret result;
+}
+
+
+main
+{
+	var char ch;
+	ch = 'a';
+	write "Контрольный пример";
+
+	write ch;
+	write "Получим факториал от числа:";
+	var short numb1;
+	numb1 = 0o6;
+	$writeOct(numb1);
+	write "Результат:";
+	write $fact(numb1);
+
+	
+	var bool end;
+	end = true;
+	write "Контрольный пример окончен успешно:";
+	write end;
+}
+

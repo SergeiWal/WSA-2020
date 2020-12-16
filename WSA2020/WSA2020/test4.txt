@@ -1,0 +1,5 @@
+main
+{
+short I;
+i=3;
+}
